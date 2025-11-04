@@ -531,9 +531,11 @@ const AppState = {
         if (userType === 'comercio') {
             this.showScreen('comercioDashboard');
             this.renderComercioTramites();
+            this.updateComercioWidgets();
         } else {
             this.showScreen('inspectorDashboard');
             this.renderInspectorTramites('all');
+            this.updateInspectorWidgets();
         }
         this.updateNotificationBadges();
     },
@@ -1501,6 +1503,7 @@ const AppState = {
         document.getElementById('nuevoTramiteForm').reset();
         document.getElementById('nuevoTramiteModal').classList.remove('active');
         this.renderComercioTramites();
+        this.updateComercioWidgets();
         this.showNotification('Trámite creado exitosamente', 'success');
     },
     
@@ -2866,6 +2869,188 @@ const AppState = {
         
         // Búsqueda y filtros
         this.setupSearchAndFilters();
+    },
+    
+    // Actualizar widgets del dashboard de comercio
+    updateComercioWidgets() {
+        const userTramites = this.tramites.filter(t => t.comercioId === this.currentUser.email);
+        const activos = userTramites.filter(t => t.estado === 'en-proceso' || t.estado === 'pendiente').length;
+        const pendientes = userTramites.filter(t => t.estado === 'pendiente').length;
+        
+        const now = new Date();
+        const mesActual = now.getMonth();
+        const añoActual = now.getFullYear();
+        const completadosMes = userTramites.filter(t => {
+            if (t.estado === 'completado' && t.historial && t.historial.length > 0) {
+                const fechaCompletado = new Date(t.historial[t.historial.length - 1].fecha);
+                return fechaCompletado.getMonth() === mesActual && fechaCompletado.getFullYear() === añoActual;
+            }
+            return false;
+        }).length;
+        
+        // Calcular tiempo promedio
+        let tiempoPromedio = 0;
+        const tramitesCompletados = userTramites.filter(t => t.estado === 'completado' && t.historial && t.historial.length > 0);
+        if (tramitesCompletados.length > 0) {
+            const tiempos = tramitesCompletados.map(t => {
+                const inicio = new Date(t.fechaCreacion);
+                const fin = new Date(t.historial[t.historial.length - 1].fecha);
+                return (fin - inicio) / (1000 * 60 * 60 * 24); // días
+            });
+            tiempoPromedio = Math.round((tiempos.reduce((a, b) => a + b, 0) / tiempos.length) * 10) / 10;
+        }
+        
+        // Actualizar KPI cards
+        document.getElementById('kpiTotalActivos').textContent = activos;
+        document.getElementById('kpiPendientes').textContent = pendientes;
+        document.getElementById('kpiCompletados').textContent = completadosMes;
+        document.getElementById('kpiTiempoPromedio').textContent = tiempoPromedio || '0';
+        
+        // Widget de progreso
+        const tramiteReciente = userTramites
+            .filter(t => t.estado !== 'completado' && t.estado !== 'rechazado')
+            .sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion))[0];
+        
+        const progresoContainer = document.getElementById('widgetProgresoComercio');
+        if (tramiteReciente && tramiteReciente.historial) {
+            const completadas = tramiteReciente.historial.filter(h => h.completado).length;
+            const total = tramiteReciente.historial.length;
+            const porcentaje = Math.round((completadas / total) * 100);
+            
+            progresoContainer.innerHTML = `
+                <div class="progress-widget-content">
+                    <div class="progress-widget-item">
+                        <h4>${tramiteReciente.id} - ${tramiteReciente.nombreComercio}</h4>
+                        <div class="progress-bar-widget">
+                            <div class="progress-fill-widget" style="width: ${porcentaje}%"></div>
+                        </div>
+                        <div class="progress-steps">
+                            <span>${completadas} de ${total} etapas</span>
+                            <span>${porcentaje}%</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            progresoContainer.innerHTML = '<p class="widget-empty">No hay trámites activos</p>';
+        }
+        
+        // Widget de notificaciones
+        const notificacionesComercio = this.notifications.filter(n => {
+            return n.tramiteId && userTramites.some(t => t.id === n.tramiteId);
+        }).sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 3);
+        
+        const notificacionesContainer = document.getElementById('widgetNotificacionesComercio');
+        if (notificacionesComercio.length > 0) {
+            notificacionesContainer.innerHTML = notificacionesComercio.map(n => {
+                const timeAgo = this.getTimeAgo(new Date(n.fecha));
+                return `
+                    <div class="notification-preview-item ${n.read ? '' : 'unread'}" onclick="AppState.viewTramiteFromNotification('${n.tramiteId}')">
+                        <p class="notification-preview-text">${n.message}</p>
+                        <span class="notification-preview-time">${timeAgo}</span>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            notificacionesContainer.innerHTML = '<p class="widget-empty">No hay notificaciones</p>';
+        }
+    },
+    
+    // Actualizar widgets del dashboard de inspector
+    updateInspectorWidgets() {
+        const allTramites = this.tramites;
+        const totalAsignados = allTramites.length;
+        
+        // Calcular urgentes (pendientes por más de 7 días)
+        const hoy = new Date();
+        const urgentes = allTramites.filter(t => {
+            if (t.estado === 'pendiente' || t.estado === 'en-proceso') {
+                const fechaCreacion = new Date(t.fechaCreacion);
+                const diasTranscurridos = (hoy - fechaCreacion) / (1000 * 60 * 60 * 24);
+                return diasTranscurridos > 7;
+            }
+            return false;
+        });
+        
+        // Completados hoy
+        const completadosHoy = allTramites.filter(t => {
+            if (t.estado === 'completado' && t.historial && t.historial.length > 0) {
+                const fechaCompletado = new Date(t.historial[t.historial.length - 1].fecha);
+                return fechaCompletado.toDateString() === hoy.toDateString();
+            }
+            return false;
+        }).length;
+        
+        // Tiempo promedio
+        let tiempoPromedio = 0;
+        const tramitesCompletados = allTramites.filter(t => t.estado === 'completado' && t.historial && t.historial.length > 0);
+        if (tramitesCompletados.length > 0) {
+            const tiempos = tramitesCompletados.map(t => {
+                const inicio = new Date(t.fechaCreacion);
+                const fin = new Date(t.historial[t.historial.length - 1].fecha);
+                return (fin - inicio) / (1000 * 60 * 60 * 24);
+            });
+            tiempoPromedio = Math.round((tiempos.reduce((a, b) => a + b, 0) / tiempos.length) * 10) / 10;
+        }
+        
+        // Actualizar KPI cards
+        document.getElementById('kpiTotalAsignados').textContent = totalAsignados;
+        document.getElementById('kpiUrgentes').textContent = urgentes.length;
+        document.getElementById('kpiCompletadosHoy').textContent = completadosHoy;
+        document.getElementById('kpiTiempoPromedioInspector').textContent = tiempoPromedio || '0';
+        
+        // Widget de urgentes
+        const urgentesContainer = document.getElementById('widgetUrgentesInspector');
+        if (urgentes.length > 0) {
+            urgentesContainer.innerHTML = urgentes.slice(0, 5).map(t => {
+                const fechaCreacion = new Date(t.fechaCreacion);
+                const diasTranscurridos = Math.floor((hoy - fechaCreacion) / (1000 * 60 * 60 * 24));
+                return `
+                    <div class="urgent-item" onclick="AppState.showTramiteDetail('${t.id}', 'inspector')">
+                        <div class="urgent-item-header">
+                            <span class="urgent-item-id">${t.id}</span>
+                            <span class="urgent-item-days">${diasTranscurridos} días</span>
+                        </div>
+                        <p class="urgent-item-name">${t.nombreComercio}</p>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            urgentesContainer.innerHTML = '<p class="widget-empty">No hay trámites urgentes</p>';
+        }
+        
+        // Widget de actividad del día
+        const actividadContainer = document.getElementById('widgetActividadInspector');
+        const actividadesHoy = allTramites.filter(t => {
+            return t.historial.some(h => {
+                if (h.fecha) {
+                    const fecha = new Date(h.fecha);
+                    return fecha.toDateString() === hoy.toDateString();
+                }
+                return false;
+            });
+        });
+        
+        if (actividadesHoy.length > 0) {
+            actividadContainer.innerHTML = actividadesHoy.slice(0, 5).map(t => {
+                const actividadHoy = t.historial.find(h => {
+                    if (h.fecha) {
+                        const fecha = new Date(h.fecha);
+                        return fecha.toDateString() === hoy.toDateString();
+                    }
+                    return false;
+                });
+                const hora = actividadHoy ? new Date(actividadHoy.fecha).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : '';
+                return `
+                    <div class="activity-item-preview">
+                        <div class="activity-item-time">${hora}</div>
+                        <p class="activity-item-text">${t.id} - ${actividadHoy?.etapa || 'Actividad'}</p>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            actividadContainer.innerHTML = '<p class="widget-empty">No hay actividades programadas</p>';
+        }
     }
 };
 

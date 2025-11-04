@@ -145,6 +145,63 @@
         </header>
         <main class="main-content">
             <div class="container">
+                <!-- Widgets de Resumen -->
+                <div id="comercioWidgets" class="dashboard-widgets">
+                    <div class="widgets-grid">
+                        <div class="widget-kpi-card">
+                            <div class="kpi-icon">📋</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Total Activos</span>
+                                <span class="kpi-value" id="kpiTotalActivos">0</span>
+                                <span class="kpi-subtitle">Trámites en proceso</span>
+                            </div>
+                        </div>
+                        <div class="widget-kpi-card">
+                            <div class="kpi-icon">⏳</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Pendientes</span>
+                                <span class="kpi-value" id="kpiPendientes">0</span>
+                                <span class="kpi-subtitle">Esperando revisión</span>
+                            </div>
+                        </div>
+                        <div class="widget-kpi-card">
+                            <div class="kpi-icon">✅</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Completados</span>
+                                <span class="kpi-value" id="kpiCompletados">0</span>
+                                <span class="kpi-subtitle">Este mes</span>
+                            </div>
+                        </div>
+                        <div class="widget-kpi-card">
+                            <div class="kpi-icon">⏱️</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Tiempo Promedio</span>
+                                <span class="kpi-value" id="kpiTiempoPromedio">0</span>
+                                <span class="kpi-subtitle">Días</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Widget de Progreso y Notificaciones -->
+                    <div class="widgets-secondary">
+                        <div class="widget-card widget-progress">
+                            <h3>📊 Progreso del Trámite Más Reciente</h3>
+                            <div id="widgetProgresoComercio">
+                                <p class="widget-empty">No hay trámites activos</p>
+                            </div>
+                        </div>
+                        <div class="widget-card widget-notifications-preview">
+                            <div class="widget-header">
+                                <h3>🔔 Notificaciones Recientes</h3>
+                                <button class="btn-link" onclick="AppState.navigateToSection('notificationsSectionComercio')">Ver todas</button>
+                            </div>
+                            <div id="widgetNotificacionesComercio">
+                                <p class="widget-empty">No hay notificaciones</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Barra de búsqueda y filtros -->
                 <div class="search-filters-bar">
                     <div class="search-box">
@@ -285,6 +342,63 @@
         </header>
         <main class="main-content">
             <div class="container">
+                <!-- Widgets de Resumen -->
+                <div id="inspectorWidgets" class="dashboard-widgets">
+                    <div class="widgets-grid">
+                        <div class="widget-kpi-card">
+                            <div class="kpi-icon">📋</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Total Asignados</span>
+                                <span class="kpi-value" id="kpiTotalAsignados">0</span>
+                                <span class="kpi-subtitle">Trámites asignados</span>
+                            </div>
+                        </div>
+                        <div class="widget-kpi-card urgent">
+                            <div class="kpi-icon">🚨</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Urgentes</span>
+                                <span class="kpi-value" id="kpiUrgentes">0</span>
+                                <span class="kpi-subtitle">Requieren atención</span>
+                            </div>
+                        </div>
+                        <div class="widget-kpi-card">
+                            <div class="kpi-icon">✅</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Completados Hoy</span>
+                                <span class="kpi-value" id="kpiCompletadosHoy">0</span>
+                                <span class="kpi-subtitle">Inspecciones</span>
+                            </div>
+                        </div>
+                        <div class="widget-kpi-card">
+                            <div class="kpi-icon">⏱️</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Tiempo Promedio</span>
+                                <span class="kpi-value" id="kpiTiempoPromedioInspector">0</span>
+                                <span class="kpi-subtitle">Días</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Widget de Trámites Urgentes y Actividad -->
+                    <div class="widgets-secondary">
+                        <div class="widget-card widget-urgent">
+                            <h3>🚨 Trámites Urgentes</h3>
+                            <div id="widgetUrgentesInspector">
+                                <p class="widget-empty">No hay trámites urgentes</p>
+                            </div>
+                        </div>
+                        <div class="widget-card widget-activity">
+                            <div class="widget-header">
+                                <h3>📅 Actividad del Día</h3>
+                                <button class="btn-link" onclick="AppState.navigateToSection('calendarSectionInspector')">Ver calendario</button>
+                            </div>
+                            <div id="widgetActividadInspector">
+                                <p class="widget-empty">No hay actividades programadas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Barra de búsqueda y filtros -->
                 <div class="search-filters-bar">
                     <div class="search-box">

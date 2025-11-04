@@ -1,2 +1,0 @@
-# Aeternum-Salubris
-Aeternum Salubris
