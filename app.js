@@ -11,14 +11,22 @@ const AppState = {
     itemsPerPage: 6,
     currentCalendarMonth: new Date().getMonth(),
     currentCalendarYear: new Date().getFullYear(),
+    advancedFilters: {},
+    savedFilters: [],
+    globalSearchResults: [],
     init() {
         this.loadData();
         this.loadNotifications();
+        this.loadSavedFilters();
         this.initTheme();
         this.setupWelcomeDarkMode();
         this.setupEventListeners();
+        this.setupKeyboardShortcuts();
         this.setupMobileNavScroll();
         this.checkReminders();
+        this.initServiceWorker();
+        this.initPushNotifications();
+        this.initChatbot();
     },
     
     setupWelcomeDarkMode() {
@@ -289,6 +297,94 @@ const AppState = {
         localStorage.setItem('tramites', JSON.stringify(this.tramites));
     },
     
+    // ========== MEJORAS: ATAJOS DE TECLADO ==========
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Ignorar si el usuario está escribiendo en un input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+                return;
+            }
+
+            // Ctrl/Cmd + K: Búsqueda global
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                this.showGlobalSearch();
+            }
+
+            // Ctrl/Cmd + N: Nuevo trámite (solo comercio)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n' && this.currentUser?.tipo === 'comercio') {
+                e.preventDefault();
+                const nuevoBtn = document.getElementById('nuevoTramiteBtn');
+                if (nuevoBtn) nuevoBtn.click();
+            }
+
+            // Esc: Cerrar modales
+            if (e.key === 'Escape') {
+                const activeModal = document.querySelector('.modal.active');
+                if (activeModal) {
+                    activeModal.classList.remove('active');
+                }
+            }
+
+            // Ctrl/Cmd + /: Mostrar ayuda de atajos
+            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                e.preventDefault();
+                this.showKeyboardShortcutsHelp();
+            }
+
+            // Teclas numéricas para navegación rápida (si está en dashboard)
+            if (e.key >= '1' && e.key <= '9' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                const activeScreen = document.querySelector('.screen.active');
+                if (activeScreen && (activeScreen.id === 'comercioDashboard' || activeScreen.id === 'inspectorDashboard')) {
+                    const num = parseInt(e.key);
+                    if (num === 2) {
+                        const notifBtn = document.getElementById('notificationsBtn') || document.getElementById('notificationsBtnInspector');
+                        if (notifBtn) notifBtn.click();
+                    } else if (num === 3) {
+                        const profileBtn = document.getElementById('profileBtnComercio') || document.getElementById('profileBtnInspector');
+                        if (profileBtn) profileBtn.click();
+                    }
+                }
+            }
+        });
+    },
+
+    showKeyboardShortcutsHelp() {
+        const shortcuts = [
+            { key: 'Ctrl/Cmd + K', action: 'Búsqueda rápida' },
+            { key: 'Ctrl/Cmd + N', action: 'Nuevo trámite (Comercio)' },
+            { key: 'Esc', action: 'Cerrar modales' },
+            { key: 'Ctrl/Cmd + /', action: 'Mostrar esta ayuda' },
+            { key: '2', action: 'Ir a Notificaciones' },
+            { key: '3', action: 'Ir a Perfil' }
+        ];
+
+        const helpHtml = `
+            <div class="keyboard-shortcuts-modal">
+                <h2>⌨️ Atajos de Teclado</h2>
+                <div class="shortcuts-list">
+                    ${shortcuts.map(s => `
+                        <div class="shortcut-item">
+                            <kbd>${s.key}</kbd>
+                            <span>${s.action}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="btn btn-primary" onclick="this.closest('.modal').classList.remove('active')">Cerrar</button>
+            </div>
+        `;
+
+        let modal = document.getElementById('keyboardShortcutsModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'keyboardShortcutsModal';
+            modal.className = 'modal';
+            document.body.appendChild(modal);
+        }
+        modal.innerHTML = `<div class="modal-content">${helpHtml}</div>`;
+        modal.classList.add('active');
+    },
+    
     setupEventListeners() {
         // Welcome screen - Go to login
         document.getElementById('goToLoginBtn')?.addEventListener('click', () => {
@@ -355,6 +451,14 @@ const AppState = {
         document.getElementById('logoutBtnInspector')?.addEventListener('click', () => this.handleLogout());
         
         // Navegación Comercio
+        // Búsqueda global
+        document.getElementById('globalSearchBtn')?.addEventListener('click', () => {
+            this.showGlobalSearch();
+        });
+        document.getElementById('globalSearchBtnInspector')?.addEventListener('click', () => {
+            this.showGlobalSearch();
+        });
+        
         document.getElementById('notificationsBtn')?.addEventListener('click', () => {
             this.navigateToSection('notificationsSectionComercio');
         });
@@ -706,6 +810,7 @@ const AppState = {
         this.currentUser = null;
         localStorage.removeItem('currentUser');
         this.showScreen('loginScreen');
+        this.updateChatbotVisibility();
     },
     
     showDashboard(userType) {
@@ -719,6 +824,7 @@ const AppState = {
             this.updateInspectorWidgets();
         }
         this.updateNotificationBadges();
+        this.updateChatbotVisibility();
     },
     
     showScreen(screenId) {
@@ -728,6 +834,12 @@ const AppState = {
         const screen = document.getElementById(screenId);
         if (screen) {
             screen.classList.add('active');
+            // Actualizar breadcrumbs si estamos en un dashboard o sección
+            if (this.currentUser) {
+                setTimeout(() => this.updateBreadcrumbs(), 100);
+            }
+            // Actualizar visibilidad del chatbot y footer
+            this.updateChatbotVisibility();
         }
     },
     
@@ -755,7 +867,8 @@ const AppState = {
             }
         }, 100);
         
-        // Actualizar nombres en navegación
+        // Actualizar breadcrumbs y nombres en navegación
+        this.updateBreadcrumbs();
         this.updateNavNames();
     },
     
@@ -1873,14 +1986,10 @@ const AppState = {
             ${documentosHTML}
             
             <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Trazabilidad del Proceso</h3>
-            <div class="timeline">
+            <div class="timeline-view">
                 ${tramite.historial.map((item, index) => {
-                    let clase = '';
-                    if (item.completado) {
-                        clase = 'completed';
-                    } else if (index === tramite.historial.findIndex(h => !h.completado)) {
-                        clase = 'active';
-                    }
+                    const isCompleted = item.completado;
+                    const isActive = !isCompleted && index === tramite.historial.findIndex(h => !h.completado);
                     
                     const fechaStr = item.fecha 
                         ? new Date(item.fecha).toLocaleString('es-CO', {
@@ -1893,15 +2002,15 @@ const AppState = {
                         : 'Pendiente';
                     
                     return `
-                        <div class="timeline-item ${clase}">
-                            <div class="timeline-content">
-                                <div class="timeline-header">
-                                    <span class="timeline-title">${item.etapa}</span>
-                                    <span class="timeline-date">${fechaStr}</span>
+                        <div class="timeline-item ${isCompleted ? 'completed' : ''}">
+                            <div class="timeline-item-content">
+                                <div class="timeline-item-header">
+                                    <span class="timeline-item-title">${item.etapa}</span>
+                                    <span class="timeline-item-date">${fechaStr}</span>
                                 </div>
-                                <p class="timeline-description">${item.descripcion}</p>
-                                ${item.inspector ? `<p class="timeline-description"><strong>Inspector:</strong> ${item.inspector}</p>` : ''}
-                                ${item.notas ? `<div class="timeline-notes"><strong>Notas:</strong> ${item.notas}</div>` : ''}
+                                <p class="timeline-item-description">${item.descripcion}</p>
+                                ${item.inspector ? `<p class="timeline-item-inspector">👤 Inspector: ${item.inspector}</p>` : ''}
+                                ${item.notas ? `<div class="timeline-notes" style="margin-top: 0.75rem; padding: 0.75rem; background: var(--primary-accent); border-radius: 6px; border-left: 3px solid var(--secondary-color);"><strong>📝 Notas:</strong> ${item.notas}</div>` : ''}
                             </div>
                         </div>
                     `;
@@ -2122,6 +2231,22 @@ const AppState = {
         };
         this.notifications.unshift(notification);
         this.saveNotifications();
+        
+        // Mostrar notificación push si está disponible
+        if (Notification.permission === 'granted') {
+            this.showPushNotification('Aeternum Salubris', {
+                body: message,
+                icon: 'Aesali.png',
+                tag: notification.id,
+                onClick: () => {
+                    if (tramiteId) {
+                        this.showTramiteDetail(tramiteId, this.currentUser?.tipo);
+                    } else {
+                        this.navigateToSection(this.currentUser?.tipo === 'comercio' ? 'notificationsSectionComercio' : 'notificationsSectionInspector');
+                    }
+                }
+            });
+        }
     },
     
     updateNotificationBadges() {
@@ -2183,6 +2308,133 @@ const AppState = {
     },
     
     // Búsqueda y filtros avanzados
+    // ========== MEJORAS: BÚSQUEDA AVANZADA ==========
+    toggleAdvancedSearch(type) {
+        const searchDiv = document.getElementById(`advancedSearch${type === 'comercio' ? 'Comercio' : 'Inspector'}`);
+        if (searchDiv) {
+            searchDiv.classList.toggle('active');
+        }
+    },
+
+    applyAdvancedSearch(type) {
+        const tipoComercio = document.getElementById('advancedFilterTipoComercio')?.value || '';
+        const fechaDesde = document.getElementById('advancedFilterFechaDesde')?.value || '';
+        const fechaHasta = document.getElementById('advancedFilterFechaHasta')?.value || '';
+        const progreso = document.getElementById('advancedFilterProgreso')?.value || '';
+        
+        // Guardar filtros
+        this.advancedFilters = {
+            tipoComercio,
+            fechaDesde,
+            fechaHasta,
+            progreso
+        };
+        
+        // Aplicar filtros y recargar lista
+        if (type === 'comercio') {
+            this.renderComercioTramites();
+            this.renderSavedFilters('comercio');
+        } else {
+            this.renderInspectorTramites();
+            this.renderSavedFilters('inspector');
+        }
+        
+        this.showNotification('Filtros aplicados', 'success');
+    },
+    
+    renderSavedFilters(type) {
+        const container = document.getElementById(`savedFiltersList${type === 'comercio' ? 'Comercio' : 'Inspector'}`);
+        if (!container) return;
+        
+        if (this.savedFilters.length === 0) {
+            container.innerHTML = '<p style="font-size: 0.875rem; color: var(--text-muted);">No hay filtros guardados</p>';
+            return;
+        }
+        
+        container.innerHTML = this.savedFilters.map((filter, index) => `
+            <div class="saved-filter-item">
+                <div>
+                    <div class="saved-filter-name">${filter.name}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">${new Date(filter.fecha).toLocaleDateString('es-ES')}</div>
+                </div>
+                <div class="saved-filter-actions">
+                    <button class="saved-filter-btn apply" onclick="AppState.applySavedFilter(${JSON.stringify(filter).replace(/"/g, '&quot;')})">Aplicar</button>
+                    <button class="saved-filter-btn delete" onclick="AppState.deleteSavedFilter(${index}); AppState.renderSavedFilters('${type}')">Eliminar</button>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    clearAdvancedSearch(type) {
+        // Limpiar campos
+        const tipoComercio = document.getElementById('advancedFilterTipoComercio');
+        const fechaDesde = document.getElementById('advancedFilterFechaDesde');
+        const fechaHasta = document.getElementById('advancedFilterFechaHasta');
+        const progreso = document.getElementById('advancedFilterProgreso');
+        
+        if (tipoComercio) tipoComercio.value = '';
+        if (fechaDesde) fechaDesde.value = '';
+        if (fechaHasta) fechaHasta.value = '';
+        if (progreso) progreso.value = '';
+        
+        this.advancedFilters = {};
+        
+        if (type === 'comercio') {
+            this.renderComercioTramites();
+        } else {
+            this.renderInspectorTramites();
+        }
+        
+        this.showNotification('Filtros limpiados', 'info');
+    },
+
+    // Vista previa de documentos
+    previewDocumentByIndex(index, tramiteId) {
+        const tramite = this.tramites.find(t => t.id === tramiteId);
+        if (!tramite || !tramite.documentos || !tramite.documentos[index]) {
+            this.showNotification('Documento no encontrado', 'error');
+            return;
+        }
+        
+        const documento = tramite.documentos[index];
+        this.previewDocument(documento, tramiteId);
+    },
+
+    previewDocument(documento, tramiteId) {
+        const preview = document.createElement('div');
+        preview.className = 'document-preview';
+        preview.innerHTML = `
+            <div class="document-preview-content">
+                <div class="document-preview-header">
+                    <h3>${documento.nombre || documento.nombreDocumento}</h3>
+                    <button class="document-preview-close" onclick="this.closest('.document-preview').remove()">Cerrar</button>
+                </div>
+                <div class="document-preview-body">
+                    ${documento.contenido ? `
+                        ${documento.tipo?.includes('pdf') ? `
+                            <iframe src="${documento.contenido}" class="document-preview-iframe"></iframe>
+                        ` : documento.tipo?.includes('image') ? `
+                            <img src="${documento.contenido}" style="max-width: 100%; height: auto;" alt="${documento.nombre}" />
+                        ` : `
+                            <p>Vista previa no disponible para este tipo de archivo.</p>
+                            <a href="${documento.contenido}" download="${documento.nombre || documento.nombreDocumento}" class="btn btn-primary">Descargar</a>
+                        `}
+                    ` : '<p>No hay contenido disponible para previsualizar.</p>'}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(preview);
+        
+        // Cerrar con Escape
+        const closeHandler = (e) => {
+            if (e.key === 'Escape') {
+                preview.remove();
+                document.removeEventListener('keydown', closeHandler);
+            }
+        };
+        document.addEventListener('keydown', closeHandler);
+    },
+
     setupSearchAndFilters() {
         const searchComercio = document.getElementById('searchInputComercio');
         const searchInspector = document.getElementById('searchInputInspector');
@@ -2222,7 +2474,7 @@ const AppState = {
         
         let filtered = this.tramites.filter(t => t.comercioId === this.currentUser.email);
         
-        // Búsqueda
+        // Búsqueda básica
         if (searchTerm) {
             filtered = filtered.filter(t => 
                 t.nombreComercio.toLowerCase().includes(searchTerm) ||
@@ -2234,6 +2486,28 @@ const AppState = {
         // Filtro por estado
         if (estadoFilter !== 'all') {
             filtered = filtered.filter(t => t.estado === estadoFilter);
+        }
+        
+        // Filtros avanzados
+        if (this.advancedFilters) {
+            if (this.advancedFilters.tipoComercio) {
+                filtered = filtered.filter(t => t.tipoComercio === this.advancedFilters.tipoComercio);
+            }
+            if (this.advancedFilters.fechaDesde) {
+                filtered = filtered.filter(t => new Date(t.fechaCreacion) >= new Date(this.advancedFilters.fechaDesde));
+            }
+            if (this.advancedFilters.fechaHasta) {
+                filtered = filtered.filter(t => new Date(t.fechaCreacion) <= new Date(this.advancedFilters.fechaHasta));
+            }
+            if (this.advancedFilters.progreso) {
+                const [min, max] = this.advancedFilters.progreso.split('-').map(Number);
+                filtered = filtered.filter(t => {
+                    const completadas = t.historial?.filter(h => h.completado).length || 0;
+                    const total = t.historial?.length || 1;
+                    const porcentaje = (completadas / total) * 100;
+                    return porcentaje >= min && porcentaje <= max;
+                });
+            }
         }
         
         // Ordenamiento
@@ -2408,22 +2682,128 @@ const AppState = {
         modal.classList.add('active');
     },
     
-    exportarReporte() {
-        const data = {
-            total: this.tramites.length,
-            pendientes: this.tramites.filter(t => t.estado === 'pendiente').length,
-            enProceso: this.tramites.filter(t => t.estado === 'en-proceso').length,
-            completados: this.tramites.filter(t => t.estado === 'completado').length,
-            fecha: new Date().toLocaleString('es-CO')
-        };
+    exportarReporte(format = 'json') {
+        const tramites = this.currentUser?.tipo === 'inspector' 
+            ? this.tramites 
+            : this.tramites.filter(t => t.comercioId === this.currentUser?.email);
         
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        if (format === 'csv') {
+            this.exportarCSV(tramites);
+        } else if (format === 'pdf') {
+            this.exportarPDF(tramites);
+        } else {
+            // JSON por defecto
+            const data = {
+                fecha: new Date().toISOString(),
+                usuario: this.currentUser?.email,
+                total: tramites.length,
+                pendientes: tramites.filter(t => t.estado === 'pendiente').length,
+                enProceso: tramites.filter(t => t.estado === 'en-proceso').length,
+                completados: tramites.filter(t => t.estado === 'completado').length,
+                tramites: tramites.map(t => ({
+                    id: t.id,
+                    nombreComercio: t.nombreComercio,
+                    direccion: t.direccion,
+                    tipoComercio: t.tipoComercio,
+                    estado: t.estado,
+                    fechaCreacion: t.fechaCreacion
+                }))
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `reporte_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            this.showNotification('Reporte exportado', 'success');
+        }
+    },
+
+    exportarCSV(tramites) {
+        const headers = ['ID', 'Comercio', 'Dirección', 'Tipo', 'Estado', 'Fecha Creación', 'Teléfono'];
+        const rows = tramites.map(t => [
+            t.id,
+            `"${t.nombreComercio}"`,
+            `"${t.direccion}"`,
+            t.tipoComercio,
+            t.estado,
+            new Date(t.fechaCreacion).toLocaleDateString('es-ES'),
+            t.telefono || ''
+        ]);
+        
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.join(','))
+        ].join('\n');
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `reporte_${new Date().toISOString().split('T')[0]}.json`;
+        a.download = `reporte_${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
-        this.showNotification('Reporte exportado', 'success');
+        this.showNotification('Reporte CSV exportado', 'success');
+    },
+
+    exportarPDF(tramites) {
+        // Crear contenido HTML para PDF
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Reporte de Trámites</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    h1 { color: #2d5a3d; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                    th { background-color: #2d5a3d; color: white; }
+                    tr:nth-child(even) { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+                <h1>Reporte de Trámites Sanitarios</h1>
+                <p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-ES')}</p>
+                <p><strong>Total de Trámites:</strong> ${tramites.length}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Comercio</th>
+                            <th>Dirección</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Fecha Creación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tramites.map(t => `
+                            <tr>
+                                <td>${t.id}</td>
+                                <td>${t.nombreComercio}</td>
+                                <td>${t.direccion}</td>
+                                <td>${t.tipoComercio}</td>
+                                <td>${t.estado}</td>
+                                <td>${new Date(t.fechaCreacion).toLocaleDateString('es-ES')}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </body>
+            </html>
+        `;
+        
+        // Abrir ventana para imprimir/guardar como PDF
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(htmlContent);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+        }, 250);
+        this.showNotification('Preparando PDF... Usa la función de impresión de tu navegador', 'info');
     },
     
     imprimirReporte() {
@@ -2635,8 +3015,11 @@ const AppState = {
                                 </div>
                                 <div class="document-item-actions">
                                     ${documentoSubido ? `
+                                        <button class="btn btn-sm btn-primary" onclick="AppState.previewDocumentByIndex(${tramite.documentos.indexOf(documentoSubido)}, '${tramite.id}')" style="margin-right: 0.5rem;">
+                                            👁️ Ver
+                                        </button>
                                         <button class="btn btn-sm btn-secondary" onclick="AppState.downloadDocumentByIndex(${tramite.documentos.indexOf(documentoSubido)})" style="margin-right: 0.5rem;">
-                                            Ver
+                                            📥 Descargar
                                         </button>
                                         ${estadoAprobacion !== 'aprobado' ? `
                                             <button class="btn btn-sm btn-success" onclick="AppState.aprobarDocumento('${tramite.id}', '${docId}')" style="margin-right: 0.5rem;">
@@ -2679,8 +3062,11 @@ const AppState = {
                                 </div>
                                 <div class="document-item-actions">
                                     ${documentoSubido ? `
+                                        <button class="btn btn-sm btn-primary" onclick="AppState.previewDocumentByIndex(${tramite.documentos.indexOf(documentoSubido)}, '${tramite.id}')" style="margin-right: 0.5rem;">
+                                            👁️ Ver
+                                        </button>
                                         <button class="btn btn-sm btn-secondary" onclick="AppState.downloadDocumentByIndex(${tramite.documentos.indexOf(documentoSubido)})" style="margin-right: 0.5rem;">
-                                            Descargar
+                                            📥 Descargar
                                         </button>
                                         <label for="${uniqueInputId}" class="btn btn-sm btn-primary" style="cursor: pointer; margin: 0;">
                                             Reemplazar
@@ -3236,6 +3622,482 @@ const AppState = {
         } else {
             actividadContainer.innerHTML = '<p class="widget-empty">No hay actividades programadas</p>';
         }
+    },
+    
+    // ========== MEJORAS DE ALTA PRIORIDAD ==========
+    
+    // 1. BÚSQUEDA GLOBAL
+    showGlobalSearch() {
+        const modal = document.getElementById('globalSearchModal');
+        const input = document.getElementById('globalSearchInput');
+        if (modal && input) {
+            modal.classList.add('active');
+            input.focus();
+            input.addEventListener('input', (e) => this.performGlobalSearch(e.target.value));
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && this.globalSearchResults.length > 0) {
+                    this.globalSearchResults[0].onClick();
+                }
+            });
+        }
+    },
+    
+    performGlobalSearch(query) {
+        if (!query || query.length < 2) {
+            document.getElementById('globalSearchResults').innerHTML = '<p class="search-placeholder">Escribe para buscar...</p>';
+            return;
+        }
+        
+        const results = [];
+        const searchTerm = query.toLowerCase();
+        
+        // Buscar en trámites
+        const tramites = this.currentUser?.tipo === 'inspector' 
+            ? this.tramites 
+            : this.tramites.filter(t => t.comercioId === this.currentUser?.email);
+        
+        tramites.forEach(tramite => {
+            const matches = [];
+            if (tramite.id.toLowerCase().includes(searchTerm)) matches.push('ID');
+            if (tramite.nombreComercio.toLowerCase().includes(searchTerm)) matches.push('Nombre');
+            if (tramite.direccion.toLowerCase().includes(searchTerm)) matches.push('Dirección');
+            if (tramite.tipoComercio.toLowerCase().includes(searchTerm)) matches.push('Tipo');
+            
+            if (matches.length > 0) {
+                results.push({
+                    type: 'tramite',
+                    title: `${tramite.id} - ${tramite.nombreComercio}`,
+                    subtitle: `${tramite.direccion} • ${this.getEstadoLabel(tramite.estado)}`,
+                    matches: matches.join(', '),
+                    onClick: () => {
+                        document.getElementById('globalSearchModal').classList.remove('active');
+                        this.showTramiteDetail(tramite.id, this.currentUser?.tipo);
+                    }
+                });
+            }
+        });
+        
+        // Buscar en notificaciones
+        this.notifications.forEach(notif => {
+            if (notif.message.toLowerCase().includes(searchTerm)) {
+                results.push({
+                    type: 'notification',
+                    title: notif.message,
+                    subtitle: new Date(notif.fecha).toLocaleDateString('es-ES'),
+                    onClick: () => {
+                        document.getElementById('globalSearchModal').classList.remove('active');
+                        if (notif.tramiteId) {
+                            this.showTramiteDetail(notif.tramiteId, this.currentUser?.tipo);
+                        } else {
+                            this.navigateToSection(this.currentUser?.tipo === 'comercio' ? 'notificationsSectionComercio' : 'notificationsSectionInspector');
+                        }
+                    }
+                });
+            }
+        });
+        
+        this.globalSearchResults = results;
+        this.renderGlobalSearchResults(results);
+    },
+    
+    renderGlobalSearchResults(results) {
+        const container = document.getElementById('globalSearchResults');
+        if (!container) return;
+        
+        if (results.length === 0) {
+            container.innerHTML = '<p class="search-placeholder">No se encontraron resultados</p>';
+            return;
+        }
+        
+        container.innerHTML = results.map((result, index) => `
+            <div class="global-search-result" onclick="(${result.onClick.toString()})()" style="cursor: pointer;">
+                <div class="search-result-icon">${result.type === 'tramite' ? '📋' : '🔔'}</div>
+                <div class="search-result-content">
+                    <div class="search-result-title">${result.title}</div>
+                    <div class="search-result-subtitle">${result.subtitle}</div>
+                    ${result.matches ? `<div class="search-result-matches">Coincide en: ${result.matches}</div>` : ''}
+                </div>
+            </div>
+        `).join('');
+    },
+    
+    // 2. FILTROS GUARDADOS
+    loadSavedFilters() {
+        const saved = localStorage.getItem('savedFilters');
+        if (saved) {
+            this.savedFilters = JSON.parse(saved);
+        }
+    },
+    
+    saveFilters() {
+        localStorage.setItem('savedFilters', JSON.stringify(this.savedFilters));
+    },
+    
+    saveCurrentFilters(name) {
+        if (!name) {
+            this.showNotification('Por favor ingresa un nombre para el filtro', 'warning');
+            return;
+        }
+        
+        const filters = {
+            name,
+            tipoComercio: document.getElementById('advancedFilterTipoComercio')?.value || '',
+            fechaDesde: document.getElementById('advancedFilterFechaDesde')?.value || '',
+            fechaHasta: document.getElementById('advancedFilterFechaHasta')?.value || '',
+            progreso: document.getElementById('advancedFilterProgreso')?.value || '',
+            estado: document.getElementById('filterEstadoComercio')?.value || document.getElementById('filterEstadoInspector')?.value || 'all',
+            sortBy: document.getElementById('sortByComercio')?.value || document.getElementById('sortByInspector')?.value || 'fecha-desc',
+            fecha: new Date().toISOString()
+        };
+        
+        this.savedFilters.push(filters);
+        this.saveFilters();
+        this.showNotification(`Filtro "${name}" guardado`, 'success');
+        
+        const type = this.currentUser?.tipo === 'comercio' ? 'comercio' : 'inspector';
+        this.renderSavedFilters(type);
+        
+        // Limpiar input
+        const input = document.getElementById(`saveFilterName${type === 'comercio' ? 'Comercio' : 'Inspector'}`);
+        if (input) input.value = '';
+    },
+    
+    applySavedFilter(filter) {
+        if (filter.tipoComercio) document.getElementById('advancedFilterTipoComercio').value = filter.tipoComercio;
+        if (filter.fechaDesde) document.getElementById('advancedFilterFechaDesde').value = filter.fechaDesde;
+        if (filter.fechaHasta) document.getElementById('advancedFilterFechaHasta').value = filter.fechaHasta;
+        if (filter.progreso) document.getElementById('advancedFilterProgreso').value = filter.progreso;
+        if (filter.estado) {
+            const estadoFilter = document.getElementById('filterEstadoComercio') || document.getElementById('filterEstadoInspector');
+            if (estadoFilter) estadoFilter.value = filter.estado;
+        }
+        if (filter.sortBy) {
+            const sortBy = document.getElementById('sortByComercio') || document.getElementById('sortByInspector');
+            if (sortBy) sortBy.value = filter.sortBy;
+        }
+        
+        this.advancedFilters = {
+            tipoComercio: filter.tipoComercio,
+            fechaDesde: filter.fechaDesde,
+            fechaHasta: filter.fechaHasta,
+            progreso: filter.progreso
+        };
+        
+        const type = this.currentUser?.tipo === 'comercio' ? 'comercio' : 'inspector';
+        this.applyAdvancedSearch(type);
+    },
+    
+    deleteSavedFilter(index) {
+        this.savedFilters.splice(index, 1);
+        this.saveFilters();
+        this.showNotification('Filtro eliminado', 'info');
+        const type = this.currentUser?.tipo === 'comercio' ? 'comercio' : 'inspector';
+        this.renderSavedFilters(type);
+    },
+    
+    // 3. BREADCRUMBS
+    renderBreadcrumbs(paths) {
+        const breadcrumbs = paths.map((path, index) => {
+            if (index === paths.length - 1) {
+                return `<span class="current">${path.name}</span>`;
+            }
+            return `<a href="#" onclick="AppState.navigateToSection('${path.section}'); return false;">${path.name}</a> <span>/</span>`;
+        }).join(' ');
+        
+        return `<div class="breadcrumbs">${breadcrumbs}</div>`;
+    },
+    
+    updateBreadcrumbs() {
+        const activeScreen = document.querySelector('.screen.active');
+        if (!activeScreen) return;
+        
+        const screenId = activeScreen.id;
+        let paths = [{ name: 'Inicio', section: this.currentUser?.tipo === 'comercio' ? 'comercioDashboard' : 'inspectorDashboard' }];
+        
+        const breadcrumbMap = {
+            'notificationsSectionComercio': { name: 'Notificaciones', section: 'notificationsSectionComercio' },
+            'notificationsSectionInspector': { name: 'Notificaciones', section: 'notificationsSectionInspector' },
+            'profileSectionComercio': { name: 'Mi Perfil', section: 'profileSectionComercio' },
+            'profileSectionInspector': { name: 'Mi Perfil', section: 'profileSectionInspector' },
+            'statsSectionInspector': { name: 'Estadísticas', section: 'statsSectionInspector' },
+            'calendarSectionInspector': { name: 'Calendario', section: 'calendarSectionInspector' }
+        };
+        
+        if (breadcrumbMap[screenId]) {
+            paths.push(breadcrumbMap[screenId]);
+        }
+        
+        const container = document.querySelector('.main-content .container');
+        if (container) {
+            const existingBreadcrumbs = container.querySelector('.breadcrumbs');
+            if (existingBreadcrumbs) {
+                existingBreadcrumbs.outerHTML = this.renderBreadcrumbs(paths);
+            } else {
+                container.insertAdjacentHTML('afterbegin', this.renderBreadcrumbs(paths));
+            }
+        }
+    },
+    
+    // 4. SERVICE WORKER (PWA)
+    initServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => {
+                        console.log('Service Worker registrado:', reg);
+                    })
+                    .catch(err => {
+                        console.log('Error al registrar Service Worker:', err);
+                    });
+            });
+        }
+    },
+    
+    // 5. NOTIFICACIONES PUSH
+    initPushNotifications() {
+        if ('Notification' in window && 'serviceWorker' in navigator) {
+            if (Notification.permission === 'default') {
+                // Solicitar permiso después de un tiempo
+                setTimeout(() => {
+                    this.requestNotificationPermission();
+                }, 3000);
+            }
+        }
+    },
+    
+    requestNotificationPermission() {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                this.showNotification('Notificaciones activadas', 'success');
+            }
+        });
+    },
+    
+    showPushNotification(title, options = {}) {
+        if ('Notification' in window && Notification.permission === 'granted') {
+            const notification = new Notification(title, {
+                body: options.body || '',
+                icon: options.icon || 'Aesali.png',
+                badge: 'Aesali.png',
+                tag: options.tag || 'default',
+                requireInteraction: options.requireInteraction || false,
+                ...options
+            });
+            
+            notification.onclick = () => {
+                window.focus();
+                if (options.onClick) options.onClick();
+                notification.close();
+            };
+            
+            setTimeout(() => notification.close(), options.duration || 5000);
+        }
+    },
+    
+    // ========== CHATBOT ==========
+    initChatbot() {
+        const toggle = document.getElementById('chatbotToggle');
+        const close = document.getElementById('chatbotClose');
+        const window = document.getElementById('chatbotWindow');
+        const input = document.getElementById('chatbotInput');
+        const sendBtn = document.getElementById('chatbotSend');
+        const quickQuestions = document.querySelectorAll('.quick-question-btn');
+        const container = document.getElementById('chatbotContainer');
+        
+        // Toggle chatbot
+        toggle?.addEventListener('click', () => {
+            window.classList.toggle('active');
+            if (window.classList.contains('active')) {
+                input.focus();
+                this.hideChatbotBadge();
+            }
+        });
+        
+        // Cerrar chatbot
+        close?.addEventListener('click', () => {
+            window.classList.remove('active');
+        });
+        
+        // Enviar mensaje con Enter
+        input?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && input.value.trim()) {
+                this.sendChatbotMessage(input.value.trim());
+                input.value = '';
+            }
+        });
+        
+        // Enviar mensaje con botón
+        sendBtn?.addEventListener('click', () => {
+            if (input.value.trim()) {
+                this.sendChatbotMessage(input.value.trim());
+                input.value = '';
+            }
+        });
+        
+        // Preguntas rápidas
+        quickQuestions.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const question = btn.dataset.question;
+                this.sendChatbotMessage(question);
+            });
+        });
+        
+        // Actualizar visibilidad del chatbot según la pantalla activa
+        this.updateChatbotVisibility();
+    },
+    
+    updateChatbotVisibility() {
+        const container = document.getElementById('chatbotContainer');
+        if (!container) return;
+        
+        const activeScreen = document.querySelector('.screen.active');
+        if (!activeScreen) {
+            container.style.display = 'none';
+            return;
+        }
+        
+        const screenId = activeScreen.id;
+        const isLoggedIn = this.currentUser !== null;
+        const isWelcomeOrLogin = screenId === 'welcomeScreen' || screenId === 'loginScreen';
+        
+        // Mostrar solo si está logueado y no está en welcome/login
+        if (isLoggedIn && !isWelcomeOrLogin) {
+            container.style.display = 'block';
+            // Mostrar badge inicial después de 3 segundos si el chat no está abierto
+            setTimeout(() => {
+                const window = document.getElementById('chatbotWindow');
+                if (window && !window.classList.contains('active')) {
+                    this.showChatbotBadge();
+                }
+            }, 3000);
+        } else {
+            container.style.display = 'none';
+            // Cerrar ventana si está abierta
+            const window = document.getElementById('chatbotWindow');
+            if (window) {
+                window.classList.remove('active');
+            }
+        }
+        
+        // Actualizar también el footer
+        this.updateFooterVisibility();
+    },
+    
+    updateFooterVisibility() {
+        const footer = document.getElementById('appFooter');
+        if (!footer) return;
+        
+        const activeScreen = document.querySelector('.screen.active');
+        if (!activeScreen) {
+            footer.style.display = 'none';
+            return;
+        }
+        
+        const screenId = activeScreen.id;
+        const isLoggedIn = this.currentUser !== null;
+        const isWelcomeOrLogin = screenId === 'welcomeScreen' || screenId === 'loginScreen';
+        
+        // Mostrar footer solo si está logueado y no está en welcome/login
+        if (isLoggedIn && !isWelcomeOrLogin) {
+            footer.style.display = 'block';
+        } else {
+            footer.style.display = 'none';
+        }
+    },
+    
+    showChatbotBadge() {
+        const badge = document.getElementById('chatbotBadge');
+        if (badge) {
+            badge.classList.add('show');
+        }
+    },
+    
+    hideChatbotBadge() {
+        const badge = document.getElementById('chatbotBadge');
+        if (badge) {
+            badge.classList.remove('show');
+        }
+    },
+    
+    sendChatbotMessage(message) {
+        const messagesContainer = document.getElementById('chatbotMessages');
+        if (!messagesContainer) return;
+        
+        // Agregar mensaje del usuario
+        const userMessage = document.createElement('div');
+        userMessage.className = 'chatbot-message user-message';
+        userMessage.innerHTML = `
+            <div class="message-avatar">👤</div>
+            <div class="message-content">
+                <p>${this.escapeHtml(message)}</p>
+                <span class="message-time">${new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+        `;
+        messagesContainer.appendChild(userMessage);
+        
+        // Scroll al final
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
+        // Responder después de un breve delay
+        setTimeout(() => {
+            this.getChatbotResponse(message);
+        }, 500);
+    },
+    
+    getChatbotResponse(message) {
+        const messagesContainer = document.getElementById('chatbotMessages');
+        if (!messagesContainer) return;
+        
+        const query = message.toLowerCase();
+        let response = '';
+        
+        // Base de conocimiento de preguntas frecuentes
+        if (query.includes('nuevo trámite') || query.includes('crear trámite') || query.includes('solicitar trámite')) {
+            response = 'Para crear un nuevo trámite, haz clic en el botón "Nuevo Trámite" en tu dashboard. Necesitarás proporcionar: nombre del comercio, dirección, tipo de comercio y teléfono de contacto.';
+        } else if (query.includes('subir documento') || query.includes('documento') || query.includes('documentos')) {
+            response = 'Para subir documentos: 1) Abre el detalle del trámite, 2) Haz clic en "Documentos", 3) Selecciona el documento requerido y sube el archivo. Los formatos aceptados son: PDF, JPG, PNG, DOC, DOCX.';
+        } else if (query.includes('documento requerido') || query.includes('qué documento') || query.includes('necesito')) {
+            response = 'Los documentos requeridos dependen del tipo de comercio. Incluyen: Certificado de Cámara de Comercio, RUT, Concepto de Uso de Suelo, Certificado de Fumigación, Análisis de Agua Potable, y otros según tu tipo de negocio. Revisa la lista completa en la sección de documentos de tu trámite.';
+        } else if (query.includes('estado') || query.includes('progreso') || query.includes('avance')) {
+            response = 'Para ver el estado de tu trámite, haz clic en cualquier trámite de tu lista. Verás el progreso completo con todas las etapas: desde la notificación inicial hasta la emisión del concepto sanitario.';
+        } else if (query.includes('tiempo') || query.includes('cuánto') || query.includes('días')) {
+            response = 'El tiempo promedio de procesamiento es de 15-30 días hábiles, dependiendo de la complejidad del trámite y la disponibilidad del inspector. Puedes ver el tiempo promedio en tu dashboard.';
+        } else if (query.includes('notificación') || query.includes('alerta') || query.includes('aviso')) {
+            response = 'Recibirás notificaciones automáticas cuando: se complete una etapa, se apruebe o rechace un documento, se programe una visita, o se emita el concepto sanitario. Revisa tu bandeja de notificaciones en el header.';
+        } else if (query.includes('visita') || query.includes('inspección')) {
+            response = 'Las visitas de inspección son programadas por el inspector sanitario. Recibirás una notificación cuando se programe una visita. En el detalle del trámite puedes ver la fecha y hora programada.';
+        } else if (query.includes('concepto') || query.includes('resultado') || query.includes('aprobado')) {
+            response = 'El concepto sanitario puede ser: Favorable (todo en orden), Favorable con Requerimientos (necesitas hacer correcciones), o Desfavorable (no se cumplen las condiciones). Se emite al finalizar todas las etapas.';
+        } else if (query.includes('contacto') || query.includes('ayuda') || query.includes('soporte')) {
+            response = 'Para ayuda adicional, puedes: revisar las notificaciones del sistema, consultar la documentación en cada etapa del trámite, o contactar directamente con el inspector asignado a tu trámite.';
+        } else if (query.includes('hola') || query.includes('buenos días') || query.includes('buenas tardes')) {
+            response = '¡Hola! Estoy aquí para ayudarte. Puedes preguntarme sobre trámites, documentos, estados, o cualquier otra duda relacionada con el sistema.';
+        } else if (query.includes('gracias') || query.includes('gracias')) {
+            response = '¡De nada! Si tienes más preguntas, no dudes en preguntarme. Estoy aquí para ayudarte.';
+        } else {
+            response = 'Entiendo tu pregunta. Puedo ayudarte con: creación de trámites, subida de documentos, estado de trámites, tiempos de procesamiento, notificaciones, visitas de inspección, y conceptos sanitarios. ¿Sobre cuál de estos temas quieres saber más?';
+        }
+        
+        // Agregar respuesta del bot
+        const botMessage = document.createElement('div');
+        botMessage.className = 'chatbot-message bot-message';
+        botMessage.innerHTML = `
+            <div class="message-avatar">🤖</div>
+            <div class="message-content">
+                <p>${response}</p>
+                <span class="message-time">${new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+        `;
+        messagesContainer.appendChild(botMessage);
+        
+        // Scroll al final
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    },
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 };
 
