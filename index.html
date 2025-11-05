@@ -11,8 +11,53 @@
     <script src="api.js"></script>
 </head>
 <body>
+    <!-- Pantalla de Bienvenida -->
+    <div id="welcomeScreen" class="screen active welcome-dark-mode">
+        <div class="welcome-container">
+            <div class="welcome-content">
+                <div class="welcome-logo-container">
+                    <div class="welcome-logo">
+                        <img src="Aesali.png" alt="Aeternum Salubris" class="logo-img-welcome">
+                    </div>
+                    <div class="welcome-logo-glow"></div>
+                    <div class="welcome-logo-glow-secondary"></div>
+                </div>
+                
+                <h1 class="welcome-title">
+                    <span class="welcome-title-main">Bienvenido a</span>
+                    <span class="welcome-title-brand">Aeternum Salubris</span>
+                </h1>
+                
+                <p class="welcome-subtitle">Tu sistema de gestión y seguimiento sanitario</p>
+                
+                <div class="welcome-actions">
+                    <button id="goToLoginBtn" class="btn btn-primary btn-large welcome-btn">
+                        <span>Comenzar</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="welcome-decoration">
+                <div class="welcome-circle circle-1"></div>
+                <div class="welcome-circle circle-2"></div>
+                <div class="welcome-circle circle-3"></div>
+                <div class="welcome-circle circle-4"></div>
+            </div>
+            
+            <div class="welcome-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Pantalla de Login/Signup -->
-    <div id="loginScreen" class="screen active">
+    <div id="loginScreen" class="screen">
         <div class="login-container">
             <div class="login-card">
                 <button id="themeToggleLogin" class="theme-toggle" style="position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10;" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>

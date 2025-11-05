@@ -15,9 +15,18 @@ const AppState = {
         this.loadData();
         this.loadNotifications();
         this.initTheme();
+        this.setupWelcomeDarkMode();
         this.setupEventListeners();
         this.setupMobileNavScroll();
         this.checkReminders();
+    },
+    
+    setupWelcomeDarkMode() {
+        // Forzar modo oscuro en la página de bienvenida
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        if (welcomeScreen) {
+            welcomeScreen.classList.add('welcome-dark-mode');
+        }
     },
     
     setupMobileNavScroll() {
@@ -281,6 +290,11 @@ const AppState = {
     },
     
     setupEventListeners() {
+        // Welcome screen - Go to login
+        document.getElementById('goToLoginBtn')?.addEventListener('click', () => {
+            this.goToLogin();
+        });
+        
         // Auth Tabs
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -715,6 +729,10 @@ const AppState = {
         if (screen) {
             screen.classList.add('active');
         }
+    },
+    
+    goToLogin() {
+        this.showScreen('loginScreen');
     },
     
     navigateToSection(sectionId) {
