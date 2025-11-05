@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="api.js"></script>
 </head>
 <body>
     <!-- Pantalla de Login/Signup -->
     <div id="loginScreen" class="screen active">
         <div class="login-container">
             <div class="login-card">
+                <button id="themeToggleLogin" class="theme-toggle" style="position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10;" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                 <div class="logo-section">
                     <div class="login-logo">
                         <img src="Aesali.png" alt="Aeternum Salubris" class="logo-img-login">
@@ -134,6 +136,7 @@
                 </div>
                 <h1>Mi Comercio</h1>
                 <div class="header-actions">
+                    <button id="themeToggle" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                     <button id="notificationsBtn" class="btn-icon" title="Notificaciones">
                         <span id="notificationCount" class="notification-badge">0</span>
                         <span class="icon-text">Notificaciones</span>
@@ -286,6 +289,7 @@
                 </div>
                 <h1>Notificaciones</h1>
                 <div class="header-actions">
+                    <button id="themeToggleNav" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                     <button onclick="AppState.navigateToSection('comercioDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
                     <button id="logoutBtnNav" class="btn-icon btn-logout">Salir</button>
                 </div>
@@ -307,6 +311,7 @@
                 </div>
                 <h1>Mi Perfil</h1>
                 <div class="header-actions">
+                    <button id="themeToggleNav2" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                     <button onclick="AppState.navigateToSection('comercioDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
                     <button id="logoutBtnNav2" class="btn-icon btn-logout">Salir</button>
                 </div>
@@ -329,6 +334,7 @@
                 </div>
                 <h1>Inspector Sanitario</h1>
                 <div class="header-actions">
+                    <button id="themeToggleInspector" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                     <button id="statsBtn" class="btn-icon" title="Estadísticas"><span class="icon-text">Estadísticas</span></button>
                     <button id="calendarBtn" class="btn-icon" title="Calendario"><span class="icon-text">Calendario</span></button>
                     <button id="notificationsBtnInspector" class="btn-icon" title="Notificaciones">
@@ -450,6 +456,7 @@
                 </div>
                 <h1>Estadísticas y Reportes</h1>
                 <div class="header-actions">
+                    <button id="themeToggleStats" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                     <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
                     <button id="logoutBtnNavInspector" class="btn-icon btn-logout">Salir</button>
                 </div>
@@ -471,6 +478,7 @@
                 </div>
                 <h1>Calendario de Visitas</h1>
                 <div class="header-actions">
+                    <button id="themeToggleCalendar" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                     <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
                     <button id="logoutBtnNavInspector2" class="btn-icon btn-logout">Salir</button>
                 </div>
@@ -492,6 +500,7 @@
                 </div>
                 <h1>Notificaciones</h1>
                 <div class="header-actions">
+                    <button id="themeToggleNotificationsInspector" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                     <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
                     <button id="logoutBtnNavInspector3" class="btn-icon btn-logout">Salir</button>
                 </div>
@@ -513,6 +522,7 @@
                 </div>
                 <h1>Mi Perfil</h1>
                 <div class="header-actions">
+                    <button id="themeToggleProfileInspector" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
                     <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
                     <button id="logoutBtnNavInspector4" class="btn-icon btn-logout">Salir</button>
                 </div>

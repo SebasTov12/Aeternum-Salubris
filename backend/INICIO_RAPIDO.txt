@@ -1,0 +1,40 @@
+═══════════════════════════════════════════════════════════════
+  🚀 INICIO RÁPIDO - BACKEND AETERNUM SALUBRIS
+═══════════════════════════════════════════════════════════════
+
+PASO 1: Abrir Terminal/PowerShell
+   - Windows: Presiona Win + X, luego "Terminal" o "PowerShell"
+   - O busca "Terminal" en el menú inicio
+
+PASO 2: Ir a la carpeta del backend
+   cd "C:\Users\sarko\OneDrive\Documentos\GitHub\Aeternum-Salubris\backend"
+
+PASO 3: Instalar dependencias (solo la primera vez)
+   npm install
+
+PASO 4: Crear archivo .env
+   - Crea un archivo llamado ".env" en la carpeta backend
+   - Copia el contenido de .env.example (si existe)
+   - O usa este contenido mínimo:
+   
+   PORT=3000
+   MONGODB_URI=mongodb://localhost:27017/aeternum-salubris
+   JWT_SECRET=mi_secreto_super_seguro
+   JWT_EXPIRE=7d
+   NODE_ENV=development
+
+PASO 5: Iniciar el servidor
+   npm run dev
+
+═══════════════════════════════════════════════════════════════
+
+Si ves estos mensajes, ¡todo está bien!:
+   ✅ MongoDB conectado: ...
+   🚀 Servidor ejecutándose en puerto 3000
+
+═══════════════════════════════════════════════════════════════
+
+Para detener el servidor: Presiona Ctrl + C
+
+═══════════════════════════════════════════════════════════════
+

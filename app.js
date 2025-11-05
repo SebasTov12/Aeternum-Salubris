@@ -14,8 +14,98 @@ const AppState = {
     init() {
         this.loadData();
         this.loadNotifications();
+        this.initTheme();
         this.setupEventListeners();
+        this.setupMobileNavScroll();
         this.checkReminders();
+    },
+    
+    setupMobileNavScroll() {
+        // Detectar scroll en header-actions y agregar clase al header-content
+        const headerContents = document.querySelectorAll('.header-content');
+        
+        headerContents.forEach(headerContent => {
+            const actions = headerContent.querySelector('.header-actions');
+            if (!actions) return;
+            
+            const checkScroll = () => {
+                const hasScroll = actions.scrollWidth > actions.clientWidth;
+                const isAtStart = actions.scrollLeft <= 1;
+                const isAtEnd = actions.scrollWidth - actions.scrollLeft <= actions.clientWidth + 1;
+                
+                if (hasScroll) {
+                    headerContent.classList.add('has-scrollable-nav');
+                    
+                    // Indicador de inicio
+                    if (isAtStart) {
+                        headerContent.classList.remove('has-scrolled-nav');
+                    } else {
+                        headerContent.classList.add('has-scrolled-nav');
+                    }
+                    
+                    // Indicador de final
+                    if (isAtEnd) {
+                        headerContent.classList.remove('has-scrollable-nav');
+                    }
+                } else {
+                    headerContent.classList.remove('has-scrollable-nav', 'has-scrolled-nav');
+                }
+            };
+            
+            // Verificar al cargar
+            setTimeout(checkScroll, 100); // Delay para asegurar que el DOM está listo
+            
+            // Verificar al redimensionar
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(checkScroll, 100);
+            });
+            
+            // Verificar scroll
+            actions.addEventListener('scroll', () => {
+                const isAtStart = actions.scrollLeft <= 1;
+                const isAtEnd = actions.scrollWidth - actions.scrollLeft <= actions.clientWidth + 1;
+                
+                if (isAtStart) {
+                    headerContent.classList.remove('has-scrolled-nav');
+                } else {
+                    headerContent.classList.add('has-scrolled-nav');
+                }
+                
+                if (isAtEnd) {
+                    headerContent.classList.remove('has-scrollable-nav');
+                } else {
+                    headerContent.classList.add('has-scrollable-nav');
+                }
+            });
+        });
+    },
+    
+    initTheme() {
+        // Cargar tema guardado o usar el predeterminado
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        this.setTheme(savedTheme);
+    },
+    
+    setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        this.updateThemeToggleButtons();
+    },
+    
+    toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        this.setTheme(newTheme);
+    },
+    
+    updateThemeToggleButtons() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const themeButtons = document.querySelectorAll('.theme-toggle');
+        themeButtons.forEach(btn => {
+            btn.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+        });
     },
     
     loadData() {
@@ -277,6 +367,11 @@ const AppState = {
             btn?.addEventListener('click', () => this.handleLogout());
         });
         
+        // Toggle de tema oscuro
+        document.querySelectorAll('.theme-toggle').forEach(btn => {
+            btn.addEventListener('click', () => this.toggleTheme());
+        });
+        
         // Nuevo trámite
         document.getElementById('nuevoTramiteBtn')?.addEventListener('click', () => {
             document.getElementById('nuevoTramiteModal').classList.add('active');
@@ -391,7 +486,7 @@ const AppState = {
         }
     },
     
-    handleLogin() {
+    async handleLogin() {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         const userType = document.getElementById('userType').value;
@@ -402,49 +497,73 @@ const AppState = {
             return;
         }
         
-        // Obtener usuarios registrados
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        
-        // Credenciales de demo
-        const validCredentials = {
-            'comercio': { email: 'comercio@demo.com', password: 'demo123' },
-            'inspector': { email: 'inspector@demo.com', password: 'demo123' }
-        };
-        
-        // Buscar en usuarios registrados
-        const user = users.find(u => u.email === email && u.tipo === userType);
-        const cred = validCredentials[userType];
-        
-        let isValid = false;
-        let userData = null;
-        
-        if (user && user.password === password) {
-            isValid = true;
-            userData = user;
-        } else if (cred && email === cred.email && password === cred.password) {
-            isValid = true;
-            userData = {
-                email,
-                tipo: userType,
-                nombre: userType === 'comercio' ? 'Restaurante El Buen Sabor' : 'Inspector Sanitario'
-            };
+        if (!email || !password) {
+            this.showNotification('Por favor completa todos los campos', 'error');
+            return;
         }
-        
-        if (isValid) {
-            this.currentUser = userData;
-            if (rememberMe) {
-                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+
+        // Intentar login con backend primero
+        try {
+            const response = await api.login(email, password, userType);
+            
+            if (response.success && response.data) {
+                this.currentUser = response.data.user;
+                
+                if (rememberMe) {
+                    localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                }
+                
+                this.showNotification('Inicio de sesión exitoso. Revisa tu email para ver los detalles de acceso.', 'success');
+                
+                setTimeout(() => {
+                    this.showDashboard(userType);
+                }, 500);
+                return;
             }
-            this.showNotification('Inicio de sesión exitoso', 'success');
-            setTimeout(() => {
-                this.showDashboard(userType);
-            }, 500);
-        } else {
-            this.showNotification('Credenciales incorrectas. Verifica tus datos o usa las credenciales de demostración.', 'error');
+        } catch (error) {
+            // Si falla el backend, intentar con localStorage (modo demo)
+            console.log('Backend no disponible, usando modo demo:', error.message);
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const validCredentials = {
+                'comercio': { email: 'comercio@demo.com', password: 'demo123' },
+                'inspector': { email: 'inspector@demo.com', password: 'demo123' }
+            };
+            
+            const user = users.find(u => u.email === email && u.tipo === userType);
+            const cred = validCredentials[userType];
+            
+            let isValid = false;
+            let userData = null;
+            
+            if (user && user.password === password) {
+                isValid = true;
+                userData = user;
+            } else if (cred && email === cred.email && password === cred.password) {
+                isValid = true;
+                userData = {
+                    email,
+                    tipo: userType,
+                    nombre: userType === 'comercio' ? 'Restaurante El Buen Sabor' : 'Inspector Sanitario'
+                };
+            }
+            
+            if (isValid) {
+                this.currentUser = userData;
+                if (rememberMe) {
+                    localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                }
+                this.showNotification('Inicio de sesión exitoso (modo demo)', 'success');
+                setTimeout(() => {
+                    this.showDashboard(userType);
+                }, 500);
+            } else {
+                this.showNotification('Credenciales incorrectas. Verifica tus datos o usa las credenciales de demostración.', 'error');
+            }
         }
     },
     
-    handleSignup() {
+    async handleSignup() {
         const userType = document.getElementById('signupUserType').value;
         const nombre = document.getElementById('signupNombre').value.trim();
         const email = document.getElementById('signupEmail').value.trim();
@@ -485,36 +604,84 @@ const AppState = {
             return;
         }
         
-        // Verificar si el email ya existe
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        if (users.some(u => u.email === email)) {
-            this.showNotification('Este correo electrónico ya está registrado', 'error');
-            return;
+        // Campos específicos según tipo
+        let nombreComercio = '';
+        let tipoComercio = '';
+        let numeroIdentificacion = '';
+        
+        if (userType === 'comercio') {
+            nombreComercio = document.getElementById('signupNombreComercio')?.value.trim() || '';
+            tipoComercio = document.getElementById('signupTipoComercio')?.value || '';
+        } else if (userType === 'inspector') {
+            numeroIdentificacion = document.getElementById('signupNumeroIdentificacion')?.value.trim() || '';
         }
         
-        // Crear nuevo usuario
-        const newUser = {
-            id: Date.now().toString(),
-            nombre,
-            email,
-            password,
-            tipo: userType,
-            telefono,
-            direccion: userType === 'comercio' ? direccion : '',
-            fechaRegistro: new Date().toISOString()
-        };
-        
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-        
-        this.showNotification('Cuenta creada exitosamente. Ahora puedes iniciar sesión.', 'success');
-        
-        // Cambiar a tab de login y pre-llenar datos
-        setTimeout(() => {
-            this.switchAuthTab('login');
-            document.getElementById('email').value = email;
-            document.getElementById('userType').value = userType;
-        }, 1000);
+        // Intentar registro con backend primero
+        try {
+            const userData = {
+                nombre,
+                email,
+                password,
+                tipo: userType,
+                telefono,
+                direccion,
+                ...(userType === 'comercio' && { nombreComercio, tipoComercio }),
+                ...(userType === 'inspector' && { numeroIdentificacion })
+            };
+            
+            const response = await api.register(userData);
+            
+            if (response.success) {
+                this.showNotification('Cuenta creada exitosamente. Revisa tu email para confirmar tu registro. Ahora puedes iniciar sesión.', 'success');
+                
+                // Guardar también en localStorage como backup
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                users.push({
+                    ...userData,
+                    fechaCreacion: new Date().toISOString()
+                });
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Cambiar a tab de login y pre-llenar datos
+                setTimeout(() => {
+                    this.switchAuthTab('login');
+                    document.getElementById('email').value = email;
+                    document.getElementById('userType').value = userType;
+                }, 1500);
+                return;
+            }
+        } catch (error) {
+            // Si falla el backend, usar localStorage (modo demo)
+            console.log('Backend no disponible, guardando en localStorage:', error.message);
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.some(u => u.email === email)) {
+                this.showNotification('Este correo electrónico ya está registrado', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now().toString(),
+                nombre,
+                email,
+                password,
+                tipo: userType,
+                telefono,
+                direccion: userType === 'comercio' ? direccion : '',
+                fechaRegistro: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            this.showNotification('Cuenta creada exitosamente (modo demo). Ahora puedes iniciar sesión.', 'success');
+            
+            setTimeout(() => {
+                this.switchAuthTab('login');
+                document.getElementById('email').value = email;
+                document.getElementById('userType').value = userType;
+            }, 1000);
+        }
     },
     
     isValidEmail(email) {
