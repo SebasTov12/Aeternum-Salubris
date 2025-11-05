@@ -1,3 +1,528 @@
+// Traducciones
+const Translations = {
+    es: {
+        // General
+        welcome: 'Bienvenido a',
+        brand: 'Aeternum Salubris',
+        subtitle: 'Tu sistema de gestión y seguimiento sanitario',
+        begin: 'Comenzar',
+        login: 'Iniciar Sesión',
+        signup: 'Registrarse',
+        logout: 'Salir',
+        profile: 'Perfil',
+        notifications: 'Notificaciones',
+        search: 'Búsqueda global',
+        newTramite: 'Nuevo Trámite',
+        myCommerce: 'Mi Comercio',
+        inspector: 'Inspector Sanitario',
+        // Estados
+        pending: 'Pendiente',
+        inProcess: 'En Proceso',
+        completed: 'Completado',
+        rejected: 'Rechazado',
+        // Dashboard
+        totalActive: 'Total Activos',
+        totalAssigned: 'Total Asignados',
+        urgent: 'Urgentes',
+        completedToday: 'Completados Hoy',
+        averageTime: 'Tiempo Promedio',
+        // Footer
+        contact: 'Contacto',
+        quickLinks: 'Enlaces Rápidos',
+        information: 'Información',
+        privacyPolicy: 'Política de Privacidad',
+        terms: 'Términos y Condiciones',
+        support: 'Soporte',
+        allRightsReserved: 'Todos los derechos reservados',
+        // Chatbot
+        virtualAssistant: 'Asistente Virtual',
+        online: 'En línea',
+        helpPlaceholder: 'Escribe tu pregunta...',
+        languageChanged: 'Idioma cambiado exitosamente',
+        // Estados y más
+        all: 'Todos',
+        allStates: 'Todos los estados',
+        mostRecent: 'Más reciente',
+        oldest: 'Más antiguo',
+        byState: 'Por estado',
+        byName: 'Por nombre',
+        tracking: 'Seguimiento de Trámites',
+        // Formularios
+        userType: 'Tipo de Usuario',
+        selectUserType: 'Seleccione...',
+        commerce: 'Comercio',
+        email: 'Correo Electrónico',
+        emailPlaceholder: 'correo@ejemplo.com',
+        password: 'Contraseña',
+        passwordPlaceholder: '••••••••',
+        showPassword: 'Mostrar contraseña',
+        rememberSession: 'Recordar sesión',
+        fullName: 'Nombre Completo',
+        namePlaceholder: 'Nombre del comercio o inspector',
+        confirmPassword: 'Confirmar Contraseña',
+        confirmPasswordPlaceholder: 'Repite la contraseña',
+        phone: 'Teléfono de Contacto',
+        phonePlaceholder: '+57 300 123 4567',
+        address: 'Dirección',
+        addressPlaceholder: 'Dirección del comercio',
+        acceptTerms: 'Acepto los términos y condiciones',
+        minPassword: 'Mínimo 6 caracteres',
+        // Dashboard elementos
+        seeAll: 'Ver todas',
+        seeCalendar: 'Ver calendario',
+        back: 'Volver',
+        searchPlaceholder: 'Buscar por nombre, ID, dirección...',
+        advancedSearch: 'Búsqueda Avanzada',
+        close: 'Cerrar',
+        saveFilter: 'Guardar Filtro',
+        filterNamePlaceholder: 'Nombre del filtro...',
+        // Nuevo Trámite
+        commerceName: 'Nombre del Comercio',
+        requestTramite: 'Solicitar Trámite',
+        // Estados y acciones
+        view: 'Ver',
+        edit: 'Editar',
+        delete: 'Eliminar',
+        download: 'Descargar',
+        save: 'Guardar',
+        cancel: 'Cancelar',
+        filter: 'Filtrar',
+        clear: 'Limpiar',
+        // Estadísticas
+        total: 'Total',
+        active: 'Activos',
+        assigned: 'Asignados',
+        rejected: 'Rechazados',
+        averageTimeLabel: 'Días para completar',
+        distributionByState: 'Distribución por Estado',
+        monthlyTrend: 'Tendencia Mensual',
+        byCommerceType: 'Trámites por Tipo de Comercio',
+        activitySummary: 'Resumen de Actividad',
+        successRate: 'Tasa de Éxito',
+        // Notificaciones
+        noNotifications: 'No hay notificaciones',
+        allNotifications: 'Todas las notificaciones',
+        // Chatbot
+        chatbotTitle: 'Asistente Virtual',
+        chatbotOnline: 'En línea',
+        chatbotPlaceholder: 'Escribe tu pregunta...',
+        chatbotClose: 'Cerrar chat',
+        // Footer
+        home: 'Inicio',
+        myProfile: 'Mi Perfil',
+        help: 'Ayuda',
+        // Sistema
+        systemTitle: 'Sistema de Seguimiento y Trazabilidad',
+        demoCredentials: 'Credenciales de prueba:',
+        copy: 'Copiar',
+        // Global Search
+        globalSearchPlaceholder: 'Buscar trámites, documentos, notificaciones...',
+        writeToSearch: 'Escribe para buscar...',
+        noResults: 'No se encontraron resultados',
+        // Otros
+        days: 'Días',
+        of: 'del',
+        today: 'Hoy',
+        yesterday: 'Ayer',
+        loading: 'Cargando...',
+        recent: 'Recientes',
+        statistics: 'Estadísticas',
+        calendar: 'Calendario',
+        applyFilters: 'Aplicar Filtros',
+        clearFilters: 'Limpiar',
+    },
+    en: {
+        // General
+        welcome: 'Welcome to',
+        brand: 'Aeternum Salubris',
+        subtitle: 'Your health management and tracking system',
+        begin: 'Begin',
+        login: 'Sign In',
+        signup: 'Sign Up',
+        logout: 'Logout',
+        profile: 'Profile',
+        notifications: 'Notifications',
+        search: 'Global Search',
+        newTramite: 'New Procedure',
+        myCommerce: 'My Commerce',
+        inspector: 'Health Inspector',
+        // Estados
+        pending: 'Pending',
+        inProcess: 'In Process',
+        completed: 'Completed',
+        rejected: 'Rejected',
+        // Dashboard
+        totalActive: 'Total Active',
+        totalAssigned: 'Total Assigned',
+        urgent: 'Urgent',
+        completedToday: 'Completed Today',
+        averageTime: 'Average Time',
+        // Footer
+        contact: 'Contact',
+        quickLinks: 'Quick Links',
+        information: 'Information',
+        privacyPolicy: 'Privacy Policy',
+        terms: 'Terms and Conditions',
+        support: 'Support',
+        allRightsReserved: 'All rights reserved',
+        // Chatbot
+        virtualAssistant: 'Virtual Assistant',
+        online: 'Online',
+        helpPlaceholder: 'Type your question...',
+        languageChanged: 'Language changed successfully',
+        all: 'All',
+        allStates: 'All states',
+        mostRecent: 'Most recent',
+        oldest: 'Oldest',
+        byState: 'By state',
+        byName: 'By name',
+        tracking: 'Procedure Tracking',
+        // Formularios
+        userType: 'User Type',
+        selectUserType: 'Select...',
+        commerce: 'Commerce',
+        email: 'Email',
+        emailPlaceholder: 'email@example.com',
+        password: 'Password',
+        passwordPlaceholder: '••••••••',
+        showPassword: 'Show password',
+        rememberSession: 'Remember session',
+        fullName: 'Full Name',
+        namePlaceholder: 'Commerce or inspector name',
+        confirmPassword: 'Confirm Password',
+        confirmPasswordPlaceholder: 'Repeat password',
+        phone: 'Contact Phone',
+        phonePlaceholder: '+57 300 123 4567',
+        address: 'Address',
+        addressPlaceholder: 'Commerce address',
+        acceptTerms: 'I accept the terms and conditions',
+        minPassword: 'Minimum 6 characters',
+        // Dashboard elementos
+        seeAll: 'See all',
+        seeCalendar: 'View calendar',
+        back: 'Back',
+        searchPlaceholder: 'Search by name, ID, address...',
+        advancedSearch: 'Advanced Search',
+        close: 'Close',
+        saveFilter: 'Save Filter',
+        filterNamePlaceholder: 'Filter name...',
+        // Nuevo Trámite
+        commerceName: 'Commerce Name',
+        requestTramite: 'Request Procedure',
+        // Estados y acciones
+        view: 'View',
+        edit: 'Edit',
+        delete: 'Delete',
+        download: 'Download',
+        save: 'Save',
+        cancel: 'Cancel',
+        filter: 'Filter',
+        clear: 'Clear',
+        // Estadísticas
+        total: 'Total',
+        active: 'Active',
+        assigned: 'Assigned',
+        rejected: 'Rejected',
+        averageTimeLabel: 'Days to complete',
+        distributionByState: 'Distribution by State',
+        monthlyTrend: 'Monthly Trend',
+        byCommerceType: 'Procedures by Commerce Type',
+        activitySummary: 'Activity Summary',
+        successRate: 'Success Rate',
+        // Notificaciones
+        noNotifications: 'No notifications',
+        allNotifications: 'All notifications',
+        // Chatbot
+        chatbotTitle: 'Virtual Assistant',
+        chatbotOnline: 'Online',
+        chatbotPlaceholder: 'Type your question...',
+        chatbotClose: 'Close chat',
+        // Footer
+        home: 'Home',
+        myProfile: 'My Profile',
+        help: 'Help',
+        // Sistema
+        systemTitle: 'Tracking and Traceability System',
+        demoCredentials: 'Test credentials:',
+        copy: 'Copy',
+        // Global Search
+        globalSearchPlaceholder: 'Search procedures, documents, notifications...',
+        writeToSearch: 'Type to search...',
+        noResults: 'No results found',
+        // Otros
+        days: 'Days',
+        of: 'of',
+        today: 'Today',
+        yesterday: 'Yesterday',
+        loading: 'Loading...',
+        recent: 'Recent',
+        statistics: 'Statistics',
+        calendar: 'Calendar',
+        applyFilters: 'Apply Filters',
+        clearFilters: 'Clear',
+    },
+    fr: {
+        // General
+        welcome: 'Bienvenue à',
+        brand: 'Aeternum Salubris',
+        subtitle: 'Votre système de gestion et de suivi sanitaire',
+        begin: 'Commencer',
+        login: 'Se connecter',
+        signup: 'S\'inscrire',
+        logout: 'Déconnexion',
+        profile: 'Profil',
+        notifications: 'Notifications',
+        search: 'Recherche globale',
+        newTramite: 'Nouvelle Procédure',
+        myCommerce: 'Mon Commerce',
+        inspector: 'Inspecteur Sanitaire',
+        // Estados
+        pending: 'En attente',
+        inProcess: 'En cours',
+        completed: 'Terminé',
+        rejected: 'Rejeté',
+        // Dashboard
+        totalActive: 'Total Actif',
+        totalAssigned: 'Total Assigné',
+        urgent: 'Urgent',
+        completedToday: 'Terminé Aujourd\'hui',
+        averageTime: 'Temps Moyen',
+        // Footer
+        contact: 'Contact',
+        quickLinks: 'Liens Rapides',
+        information: 'Information',
+        privacyPolicy: 'Politique de Confidentialité',
+        terms: 'Termes et Conditions',
+        support: 'Support',
+        allRightsReserved: 'Tous droits réservés',
+        // Chatbot
+        virtualAssistant: 'Assistant Virtuel',
+        online: 'En ligne',
+        helpPlaceholder: 'Tapez votre question...',
+        languageChanged: 'Langue changée avec succès',
+        all: 'Tous',
+        allStates: 'Tous les états',
+        mostRecent: 'Plus récent',
+        oldest: 'Plus ancien',
+        byState: 'Par état',
+        byName: 'Par nom',
+        tracking: 'Suivi des Procédures',
+        // Formularios
+        userType: 'Type d\'utilisateur',
+        selectUserType: 'Sélectionnez...',
+        commerce: 'Commerce',
+        email: 'Adresse électronique',
+        emailPlaceholder: 'email@exemple.com',
+        password: 'Mot de passe',
+        passwordPlaceholder: '••••••••',
+        showPassword: 'Afficher le mot de passe',
+        rememberSession: 'Se souvenir de la session',
+        fullName: 'Nom complet',
+        namePlaceholder: 'Nom du commerce ou de l\'inspecteur',
+        confirmPassword: 'Confirmer le mot de passe',
+        confirmPasswordPlaceholder: 'Répétez le mot de passe',
+        phone: 'Téléphone de contact',
+        phonePlaceholder: '+57 300 123 4567',
+        address: 'Adresse',
+        addressPlaceholder: 'Adresse du commerce',
+        acceptTerms: 'J\'accepte les termes et conditions',
+        minPassword: 'Minimum 6 caractères',
+        // Dashboard elementos
+        seeAll: 'Voir tout',
+        seeCalendar: 'Voir le calendrier',
+        back: 'Retour',
+        searchPlaceholder: 'Rechercher par nom, ID, adresse...',
+        advancedSearch: 'Recherche avancée',
+        close: 'Fermer',
+        saveFilter: 'Enregistrer le filtre',
+        filterNamePlaceholder: 'Nom du filtre...',
+        // Nuevo Trámite
+        commerceName: 'Nom du commerce',
+        requestTramite: 'Demander une procédure',
+        // Estados y acciones
+        view: 'Voir',
+        edit: 'Modifier',
+        delete: 'Supprimer',
+        download: 'Télécharger',
+        save: 'Enregistrer',
+        cancel: 'Annuler',
+        filter: 'Filtrer',
+        clear: 'Effacer',
+        // Estadísticas
+        total: 'Total',
+        active: 'Actif',
+        assigned: 'Assigné',
+        rejected: 'Rejeté',
+        averageTimeLabel: 'Jours pour terminer',
+        distributionByState: 'Distribution par état',
+        monthlyTrend: 'Tendance mensuelle',
+        byCommerceType: 'Procédures par type de commerce',
+        activitySummary: 'Résumé de l\'activité',
+        successRate: 'Taux de succès',
+        // Notificaciones
+        noNotifications: 'Aucune notification',
+        allNotifications: 'Toutes les notifications',
+        // Chatbot
+        chatbotTitle: 'Assistant virtuel',
+        chatbotOnline: 'En ligne',
+        chatbotPlaceholder: 'Tapez votre question...',
+        chatbotClose: 'Fermer le chat',
+        // Footer
+        home: 'Accueil',
+        myProfile: 'Mon profil',
+        help: 'Aide',
+        // Sistema
+        systemTitle: 'Système de suivi et de traçabilité',
+        demoCredentials: 'Identifiants de test:',
+        copy: 'Copier',
+        // Global Search
+        globalSearchPlaceholder: 'Rechercher procédures, documents, notifications...',
+        writeToSearch: 'Tapez pour rechercher...',
+        noResults: 'Aucun résultat trouvé',
+        // Otros
+        days: 'Jours',
+        of: 'de',
+        today: 'Aujourd\'hui',
+        yesterday: 'Hier',
+        loading: 'Chargement...',
+        recent: 'Récent',
+        statistics: 'Statistiques',
+        calendar: 'Calendrier',
+        applyFilters: 'Appliquer les filtres',
+        clearFilters: 'Effacer',
+    },
+    pt: {
+        // General
+        welcome: 'Bem-vindo ao',
+        brand: 'Aeternum Salubris',
+        subtitle: 'Seu sistema de gestão e rastreamento sanitário',
+        begin: 'Começar',
+        login: 'Entrar',
+        signup: 'Registrar',
+        logout: 'Sair',
+        profile: 'Perfil',
+        notifications: 'Notificações',
+        search: 'Busca Global',
+        newTramite: 'Novo Trâmite',
+        myCommerce: 'Meu Comércio',
+        inspector: 'Inspetor Sanitário',
+        // Estados
+        pending: 'Pendente',
+        inProcess: 'Em Processo',
+        completed: 'Concluído',
+        rejected: 'Rejeitado',
+        // Dashboard
+        totalActive: 'Total Ativo',
+        totalAssigned: 'Total Atribuído',
+        urgent: 'Urgente',
+        completedToday: 'Concluído Hoje',
+        averageTime: 'Tempo Médio',
+        // Footer
+        contact: 'Contato',
+        quickLinks: 'Links Rápidos',
+        information: 'Informação',
+        privacyPolicy: 'Política de Privacidade',
+        terms: 'Termos e Condições',
+        support: 'Suporte',
+        allRightsReserved: 'Todos os direitos reservados',
+        // Chatbot
+        virtualAssistant: 'Assistente Virtual',
+        online: 'Online',
+        helpPlaceholder: 'Digite sua pergunta...',
+        languageChanged: 'Idioma alterado com sucesso',
+        all: 'Todos',
+        allStates: 'Todos os estados',
+        mostRecent: 'Mais recente',
+        oldest: 'Mais antigo',
+        byState: 'Por estado',
+        byName: 'Por nome',
+        tracking: 'Rastreamento de Trâmites',
+        // Formularios
+        userType: 'Tipo de Usuário',
+        selectUserType: 'Selecione...',
+        commerce: 'Comércio',
+        email: 'E-mail',
+        emailPlaceholder: 'email@exemplo.com',
+        password: 'Senha',
+        passwordPlaceholder: '••••••••',
+        showPassword: 'Mostrar senha',
+        rememberSession: 'Lembrar sessão',
+        fullName: 'Nome Completo',
+        namePlaceholder: 'Nome do comércio ou inspetor',
+        confirmPassword: 'Confirmar Senha',
+        confirmPasswordPlaceholder: 'Repita a senha',
+        phone: 'Telefone de Contato',
+        phonePlaceholder: '+57 300 123 4567',
+        address: 'Endereço',
+        addressPlaceholder: 'Endereço do comércio',
+        acceptTerms: 'Aceito os termos e condições',
+        minPassword: 'Mínimo 6 caracteres',
+        // Dashboard elementos
+        seeAll: 'Ver todos',
+        seeCalendar: 'Ver calendário',
+        back: 'Voltar',
+        searchPlaceholder: 'Buscar por nome, ID, endereço...',
+        advancedSearch: 'Busca Avançada',
+        close: 'Fechar',
+        saveFilter: 'Salvar Filtro',
+        filterNamePlaceholder: 'Nome do filtro...',
+        // Nuevo Trámite
+        commerceName: 'Nome do Comércio',
+        requestTramite: 'Solicitar Trâmite',
+        // Estados y acciones
+        view: 'Ver',
+        edit: 'Editar',
+        delete: 'Excluir',
+        download: 'Baixar',
+        save: 'Salvar',
+        cancel: 'Cancelar',
+        filter: 'Filtrar',
+        clear: 'Limpar',
+        // Estadísticas
+        total: 'Total',
+        active: 'Ativos',
+        assigned: 'Atribuídos',
+        rejected: 'Rejeitados',
+        averageTimeLabel: 'Dias para completar',
+        distributionByState: 'Distribuição por Estado',
+        monthlyTrend: 'Tendência Mensal',
+        byCommerceType: 'Trâmites por Tipo de Comércio',
+        activitySummary: 'Resumo de Atividade',
+        successRate: 'Taxa de Sucesso',
+        // Notificaciones
+        noNotifications: 'Sem notificações',
+        allNotifications: 'Todas as notificações',
+        // Chatbot
+        chatbotTitle: 'Assistente Virtual',
+        chatbotOnline: 'Online',
+        chatbotPlaceholder: 'Digite sua pergunta...',
+        chatbotClose: 'Fechar chat',
+        // Footer
+        home: 'Início',
+        myProfile: 'Meu Perfil',
+        help: 'Ajuda',
+        // Sistema
+        systemTitle: 'Sistema de Rastreamento e Rastreabilidade',
+        demoCredentials: 'Credenciais de teste:',
+        copy: 'Copiar',
+        // Global Search
+        globalSearchPlaceholder: 'Buscar trâmites, documentos, notificações...',
+        writeToSearch: 'Digite para buscar...',
+        noResults: 'Nenhum resultado encontrado',
+        // Otros
+        days: 'Dias',
+        of: 'de',
+        today: 'Hoje',
+        yesterday: 'Ontem',
+        loading: 'Carregando...',
+        recent: 'Recentes',
+        statistics: 'Estatísticas',
+        calendar: 'Calendário',
+        applyFilters: 'Aplicar Filtros',
+        clearFilters: 'Limpar',
+    }
+};
+
 // Estado de la aplicación
 const AppState = {
     currentUser: null,
@@ -14,7 +539,9 @@ const AppState = {
     advancedFilters: {},
     savedFilters: [],
     globalSearchResults: [],
+    currentLanguage: 'es',
     init() {
+        this.loadLanguage();
         this.loadData();
         this.loadNotifications();
         this.loadSavedFilters();
@@ -27,6 +554,8 @@ const AppState = {
         this.initServiceWorker();
         this.initPushNotifications();
         this.initChatbot();
+        this.initLanguageSelector();
+        this.applyLanguage();
     },
     
     setupWelcomeDarkMode() {
@@ -103,6 +632,177 @@ const AppState = {
         // Cargar tema guardado o usar el predeterminado
         const savedTheme = localStorage.getItem('theme') || 'light';
         this.setTheme(savedTheme);
+    },
+    
+    // ========== SISTEMA DE IDIOMAS ==========
+    loadLanguage() {
+        const savedLang = localStorage.getItem('language') || 'es';
+        this.currentLanguage = savedLang;
+        document.documentElement.setAttribute('lang', savedLang);
+    },
+    
+    saveLanguage() {
+        localStorage.setItem('language', this.currentLanguage);
+        document.documentElement.setAttribute('lang', this.currentLanguage);
+    },
+    
+    setLanguage(lang) {
+        if (Translations[lang]) {
+            this.currentLanguage = lang;
+            this.saveLanguage();
+            this.applyLanguage();
+            this.updateLanguageSelector();
+            this.showNotification(this.t('languageChanged') || 'Idioma cambiado', 'success');
+        }
+    },
+    
+    t(key) {
+        return Translations[this.currentLanguage]?.[key] || Translations['es'][key] || key;
+    },
+    
+    initLanguageSelector() {
+        const toggle = document.getElementById('languageToggle');
+        const toggleInspector = document.getElementById('languageToggleInspector');
+        const dropdown = document.getElementById('languageDropdown');
+        const dropdownInspector = document.getElementById('languageDropdownInspector');
+        
+        // Toggle dropdown
+        toggle?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown?.classList.toggle('active');
+        });
+        
+        toggleInspector?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownInspector?.classList.toggle('active');
+        });
+        
+        // Cerrar al hacer click fuera
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.language-selector')) {
+                dropdown?.classList.remove('active');
+                dropdownInspector?.classList.remove('active');
+            }
+        });
+        
+        // Seleccionar idioma
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const lang = option.dataset.lang;
+                this.setLanguage(lang);
+                dropdown?.classList.remove('active');
+                dropdownInspector?.classList.remove('active');
+            });
+        });
+        
+        this.updateLanguageSelector();
+    },
+    
+    updateLanguageSelector() {
+        const langCode = this.currentLanguage.toUpperCase();
+        const langFlags = { es: '🇪🇸', en: '🇺🇸', fr: '🇫🇷', pt: '🇧🇷' };
+        
+        document.querySelectorAll('.language-code').forEach(code => {
+            code.textContent = langCode;
+        });
+        
+        document.querySelectorAll('.language-flag').forEach(flag => {
+            flag.textContent = langFlags[this.currentLanguage] || '🌐';
+        });
+        
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.classList.remove('active');
+            if (option.dataset.lang === this.currentLanguage) {
+                option.classList.add('active');
+            }
+        });
+    },
+    
+    applyLanguage() {
+        // Traducir elementos con data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const translation = this.t(key);
+            if (translation) {
+                if (el.tagName === 'INPUT' && el.type !== 'submit' && el.type !== 'button') {
+                    el.placeholder = translation;
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = translation;
+                } else {
+                    el.textContent = translation;
+                }
+            }
+        });
+        
+        // Traducir placeholders con data-i18n-placeholder
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            const translation = this.t(key);
+            if (translation) {
+                el.placeholder = translation;
+            }
+        });
+        
+        // Traducir aria-labels con data-i18n-aria-label
+        document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+            const key = el.getAttribute('data-i18n-aria-label');
+            const translation = this.t(key);
+            if (translation) {
+                el.setAttribute('aria-label', translation);
+            }
+        });
+        
+        // Actualizar títulos y textos principales
+        this.updateMainTexts();
+    },
+    
+    updateMainTexts() {
+        // Bienvenida
+        const welcomeTitle = document.querySelector('.welcome-title-main');
+        const welcomeBrand = document.querySelector('.welcome-title-brand');
+        const welcomeSubtitle = document.querySelector('.welcome-subtitle');
+        const beginBtn = document.getElementById('goToLoginBtn');
+        
+        if (welcomeTitle) welcomeTitle.textContent = this.t('welcome');
+        if (welcomeBrand) welcomeBrand.textContent = this.t('brand');
+        if (welcomeSubtitle) welcomeSubtitle.textContent = this.t('subtitle');
+        if (beginBtn) {
+            const span = beginBtn.querySelector('span:first-child');
+            if (span) span.textContent = this.t('begin');
+        }
+        
+        // Headers
+        const h1Comercio = document.querySelector('#comercioDashboard h1');
+        const h1Inspector = document.querySelector('#inspectorDashboard h1');
+        if (h1Comercio) h1Comercio.textContent = this.t('myCommerce');
+        if (h1Inspector) h1Inspector.textContent = this.t('inspector');
+        
+        // Botones principales
+        const nuevoTramiteBtn = document.getElementById('nuevoTramiteBtn');
+        if (nuevoTramiteBtn) nuevoTramiteBtn.textContent = this.t('newTramite');
+        
+        // Actualizar textos de botones en headers
+        document.querySelectorAll('.icon-text').forEach(iconText => {
+            const text = iconText.textContent.trim();
+            if (text.includes('Notificaciones')) {
+                iconText.textContent = this.t('notifications');
+            } else if (text.includes('Perfil')) {
+                iconText.textContent = this.t('profile');
+            }
+        });
+        
+        const logoutBtns = document.querySelectorAll('.btn-logout');
+        logoutBtns.forEach(btn => {
+            if (btn.textContent.includes('Salir')) {
+                btn.textContent = this.t('logout');
+            }
+        });
+        
+        // Footer
+        const footerContact = document.querySelector('.footer-section h4');
+        if (footerContact && footerContact.textContent.includes('Contacto')) {
+            footerContact.textContent = this.t('contact');
+        }
     },
     
     setTheme(theme) {
@@ -4021,7 +4721,14 @@ const AppState = {
     
     sendChatbotMessage(message) {
         const messagesContainer = document.getElementById('chatbotMessages');
-        if (!messagesContainer) return;
+        const input = document.getElementById('chatbotInput');
+        if (!messagesContainer || !input) return;
+        
+        // Limpiar mensaje de bienvenida inicial si existe
+        const welcomeMessage = messagesContainer.querySelector('.welcome-message');
+        if (welcomeMessage) {
+            welcomeMessage.remove();
+        }
         
         // Agregar mensaje del usuario
         const userMessage = document.createElement('div');
@@ -4038,10 +4745,49 @@ const AppState = {
         // Scroll al final
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
         
-        // Responder después de un breve delay
+        // Mostrar indicador de escritura
+        this.showTypingIndicator();
+        
+        // Responder después de un breve delay (simulando procesamiento)
+        const delay = Math.random() * 500 + 800; // Entre 800ms y 1300ms
         setTimeout(() => {
+            this.hideTypingIndicator();
             this.getChatbotResponse(message);
-        }, 500);
+        }, delay);
+    },
+    
+    showTypingIndicator() {
+        const messagesContainer = document.getElementById('chatbotMessages');
+        if (!messagesContainer) return;
+        
+        // Remover indicador anterior si existe
+        const existing = messagesContainer.querySelector('.typing-indicator');
+        if (existing) existing.remove();
+        
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'chatbot-message bot-message typing-indicator';
+        typingIndicator.innerHTML = `
+            <div class="message-avatar">🤖</div>
+            <div class="message-content">
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        `;
+        messagesContainer.appendChild(typingIndicator);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    },
+    
+    hideTypingIndicator() {
+        const messagesContainer = document.getElementById('chatbotMessages');
+        if (!messagesContainer) return;
+        
+        const typingIndicator = messagesContainer.querySelector('.typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
     },
     
     getChatbotResponse(message) {
@@ -4050,48 +4796,155 @@ const AppState = {
         
         const query = message.toLowerCase();
         let response = '';
+        let actions = null;
         
-        // Base de conocimiento de preguntas frecuentes
+        // Obtener información del usuario actual
+        const userType = this.currentUser?.tipo;
+        const tramitesCount = this.tramites?.filter(t => 
+            userType === 'comercio' ? t.comercioId === this.currentUser?.email : true
+        ).length || 0;
+        
+        // Base de conocimiento mejorada con respuestas contextuales
         if (query.includes('nuevo trámite') || query.includes('crear trámite') || query.includes('solicitar trámite')) {
-            response = 'Para crear un nuevo trámite, haz clic en el botón "Nuevo Trámite" en tu dashboard. Necesitarás proporcionar: nombre del comercio, dirección, tipo de comercio y teléfono de contacto.';
-        } else if (query.includes('subir documento') || query.includes('documento') || query.includes('documentos')) {
-            response = 'Para subir documentos: 1) Abre el detalle del trámite, 2) Haz clic en "Documentos", 3) Selecciona el documento requerido y sube el archivo. Los formatos aceptados son: PDF, JPG, PNG, DOC, DOCX.';
+            if (userType === 'comercio') {
+                response = `Para crear un nuevo trámite:\n\n1️⃣ Haz clic en el botón "Nuevo Trámite" en tu dashboard\n2️⃣ Completa el formulario con:\n   • Nombre del comercio\n   • Dirección completa\n   • Tipo de comercio\n   • Teléfono de contacto\n\n3️⃣ Revisa y envía la solicitud\n\n¿Quieres que te ayude a crear uno ahora?`;
+                actions = [{ text: this.t('newTramite'), action: 'createTramite' }];
+            } else {
+                response = 'Solo los comercios pueden crear nuevos trámites. Como inspector, puedes revisar y gestionar los trámites asignados desde tu dashboard.';
+            }
+        } else if (query.includes('mis trámites') || query.includes('listar trámites') || query.includes('ver trámites')) {
+            if (userType === 'comercio') {
+                const activos = this.tramites?.filter(t => 
+                    t.comercioId === this.currentUser?.email && 
+                    (t.estado === 'pendiente' || t.estado === 'en-proceso')
+                ).length || 0;
+                response = `Tienes ${tramitesCount} trámite${tramitesCount !== 1 ? 's' : ''} en total.\n\n📊 ${activos} ${activos === 1 ? 'está' : 'están'} activo${activos !== 1 ? 's' : ''} (pendiente o en proceso)\n\n¿Quieres ver el detalle de algún trámite específico?`;
+                if (tramitesCount > 0) {
+                    actions = [{ text: 'Ver todos los trámites', action: 'viewTramites' }];
+                }
+            } else {
+                const asignados = this.tramites?.filter(t => t.estado !== 'completado').length || 0;
+                response = `Tienes ${asignados} trámite${asignados !== 1 ? 's' : ''} asignado${asignados !== 1 ? 's' : ''} para revisar.\n\nPuedes verlos y gestionarlos desde tu dashboard principal.`;
+            }
+        } else if (query.includes('subir documento') || query.includes('cargar documento') || query.includes('documento')) {
+            response = `Para subir documentos:\n\n1️⃣ Abre el detalle del trámite que necesitas\n2️⃣ Haz clic en la pestaña "Documentos"\n3️⃣ Selecciona el documento requerido\n4️⃣ Sube el archivo (PDF, JPG, PNG, DOC, DOCX)\n5️⃣ Espera la confirmación\n\n📋 Formatos aceptados: PDF, JPG, PNG, DOC, DOCX\n📏 Tamaño máximo: 10 MB por archivo\n\n¿Necesitas ayuda con algún documento específico?`;
+            actions = [{ text: 'Ver mis trámites', action: 'viewTramites' }];
         } else if (query.includes('documento requerido') || query.includes('qué documento') || query.includes('necesito')) {
-            response = 'Los documentos requeridos dependen del tipo de comercio. Incluyen: Certificado de Cámara de Comercio, RUT, Concepto de Uso de Suelo, Certificado de Fumigación, Análisis de Agua Potable, y otros según tu tipo de negocio. Revisa la lista completa en la sección de documentos de tu trámite.';
+            response = `Los documentos requeridos dependen del tipo de comercio:\n\n📄 Documentos generales:\n• Certificado de Cámara de Comercio\n• RUT (Registro Único Tributario)\n• Concepto de Uso de Suelo\n\n🏪 Documentos específicos:\n• Certificado de Fumigación\n• Análisis de Agua Potable\n• Licencia de Funcionamiento (si aplica)\n• Permisos de salud y seguridad\n\nRevisa la lista completa en la sección de documentos de cada trámite.`;
         } else if (query.includes('estado') || query.includes('progreso') || query.includes('avance')) {
-            response = 'Para ver el estado de tu trámite, haz clic en cualquier trámite de tu lista. Verás el progreso completo con todas las etapas: desde la notificación inicial hasta la emisión del concepto sanitario.';
+            if (tramitesCount > 0) {
+                const estados = this.tramites?.filter(t => 
+                    userType === 'comercio' ? t.comercioId === this.currentUser?.email : true
+                ).reduce((acc, t) => {
+                    acc[t.estado] = (acc[t.estado] || 0) + 1;
+                    return acc;
+                }, {}) || {};
+                
+                response = `Estado de tus trámites:\n\n`;
+                if (estados.pendiente) response += `⏳ Pendientes: ${estados.pendiente}\n`;
+                if (estados['en-proceso']) response += `🔄 En proceso: ${estados['en-proceso']}\n`;
+                if (estados.completado) response += `✅ Completados: ${estados.completado}\n`;
+                if (estados.rechazado) response += `❌ Rechazados: ${estados.rechazado}\n`;
+                
+                response += `\nHaz clic en cualquier trámite para ver el progreso detallado con todas las etapas.`;
+                actions = [{ text: 'Ver mis trámites', action: 'viewTramites' }];
+            } else {
+                response = 'Para ver el estado de tu trámite, haz clic en cualquier trámite de tu lista. Verás el progreso completo con todas las etapas desde la notificación inicial hasta la emisión del concepto sanitario.';
+            }
         } else if (query.includes('tiempo') || query.includes('cuánto') || query.includes('días')) {
-            response = 'El tiempo promedio de procesamiento es de 15-30 días hábiles, dependiendo de la complejidad del trámite y la disponibilidad del inspector. Puedes ver el tiempo promedio en tu dashboard.';
+            const tiempoPromedio = '15-30 días hábiles';
+            response = `⏱️ Tiempo de procesamiento:\n\n• Tiempo promedio: ${tiempoPromedio}\n• Depende de:\n  - Complejidad del trámite\n  - Disponibilidad del inspector\n  - Completitud de documentos\n\n💡 Consejo: Sube todos los documentos requeridos lo antes posible para acelerar el proceso.`;
         } else if (query.includes('notificación') || query.includes('alerta') || query.includes('aviso')) {
-            response = 'Recibirás notificaciones automáticas cuando: se complete una etapa, se apruebe o rechace un documento, se programe una visita, o se emita el concepto sanitario. Revisa tu bandeja de notificaciones en el header.';
+            const notifCount = this.notifications?.filter(n => !n.read).length || 0;
+            response = `🔔 Notificaciones:\n\nRecibirás notificaciones automáticas cuando:\n• Se complete una etapa\n• Se apruebe o rechace un documento\n• Se programe una visita\n• Se emita el concepto sanitario\n\n${notifCount > 0 ? `Tienes ${notifCount} notificación${notifCount !== 1 ? 'es' : ''} sin leer.` : 'No tienes notificaciones nuevas.'}\n\nRevisa tu bandeja en el icono de notificaciones del header.`;
+            if (notifCount > 0) {
+                actions = [{ text: 'Ver notificaciones', action: 'viewNotifications' }];
+            }
         } else if (query.includes('visita') || query.includes('inspección')) {
-            response = 'Las visitas de inspección son programadas por el inspector sanitario. Recibirás una notificación cuando se programe una visita. En el detalle del trámite puedes ver la fecha y hora programada.';
+            response = `🏢 Visitas de inspección:\n\n• Son programadas por el inspector sanitario\n• Recibirás una notificación cuando se programe\n• En el detalle del trámite verás la fecha y hora\n• Prepárate con todos los documentos listos\n\n💡 Tip: Revisa tu calendario de actividades para ver las visitas programadas.`;
+            if (userType === 'inspector') {
+                actions = [{ text: 'Ver calendario', action: 'viewCalendar' }];
+            }
         } else if (query.includes('concepto') || query.includes('resultado') || query.includes('aprobado')) {
-            response = 'El concepto sanitario puede ser: Favorable (todo en orden), Favorable con Requerimientos (necesitas hacer correcciones), o Desfavorable (no se cumplen las condiciones). Se emite al finalizar todas las etapas.';
+            response = `📋 Concepto sanitario:\n\nPuede ser:\n\n✅ Favorable: Todo en orden, puedes operar\n⚠️ Favorable con Requerimientos: Necesitas hacer correcciones\n❌ Desfavorable: No se cumplen las condiciones\n\nSe emite al finalizar todas las etapas del trámite.`;
         } else if (query.includes('contacto') || query.includes('ayuda') || query.includes('soporte')) {
-            response = 'Para ayuda adicional, puedes: revisar las notificaciones del sistema, consultar la documentación en cada etapa del trámite, o contactar directamente con el inspector asignado a tu trámite.';
-        } else if (query.includes('hola') || query.includes('buenos días') || query.includes('buenas tardes')) {
-            response = '¡Hola! Estoy aquí para ayudarte. Puedes preguntarme sobre trámites, documentos, estados, o cualquier otra duda relacionada con el sistema.';
-        } else if (query.includes('gracias') || query.includes('gracias')) {
-            response = '¡De nada! Si tienes más preguntas, no dudes en preguntarme. Estoy aquí para ayudarte.';
+            response = `💬 Soporte:\n\nPara ayuda adicional:\n• Revisa las notificaciones del sistema\n• Consulta la documentación en cada etapa\n• Contacta al inspector asignado a tu trámite\n• Teléfono: +57 310 356 1871\n\n¿Hay algo específico en lo que pueda ayudarte?`;
+        } else if (query.includes('hola') || query.includes('buenos días') || query.includes('buenas tardes') || query.includes('hi') || query.includes('hello')) {
+            const hora = new Date().getHours();
+            let saludo = '¡Hola!';
+            if (hora < 12) saludo = '¡Buenos días!';
+            else if (hora < 19) saludo = '¡Buenas tardes!';
+            else saludo = '¡Buenas noches!';
+            
+            response = `${saludo} Soy tu asistente virtual de Aeternum Salubris.\n\nPuedo ayudarte con:\n• Creación de trámites\n• Subida de documentos\n• Estado de trámites\n• Tiempos de procesamiento\n• Notificaciones\n• Visitas de inspección\n• Conceptos sanitarios\n\n¿En qué puedo ayudarte hoy?`;
+        } else if (query.includes('gracias') || query.includes('thank')) {
+            response = '¡De nada! 😊 Si tienes más preguntas, no dudes en preguntarme. Estoy aquí para ayudarte.';
+        } else if (query.includes('adiós') || query.includes('bye') || query.includes('hasta luego')) {
+            response = '¡Hasta luego! Que tengas un excelente día. Si necesitas algo más, estaré aquí. 👋';
         } else {
-            response = 'Entiendo tu pregunta. Puedo ayudarte con: creación de trámites, subida de documentos, estado de trámites, tiempos de procesamiento, notificaciones, visitas de inspección, y conceptos sanitarios. ¿Sobre cuál de estos temas quieres saber más?';
+            // Respuesta inteligente con sugerencias
+            response = `Entiendo tu pregunta. Puedo ayudarte con:\n\n📝 Creación de trámites\n📄 Subida de documentos\n📊 Estado de trámites\n⏱️ Tiempos de procesamiento\n🔔 Notificaciones\n🏢 Visitas de inspección\n📋 Conceptos sanitarios\n\n¿Sobre cuál de estos temas quieres saber más?`;
+            actions = [
+                { text: 'Ver mis trámites', action: 'viewTramites' },
+                { text: 'Crear trámite', action: 'createTramite' }
+            ];
         }
         
         // Agregar respuesta del bot
         const botMessage = document.createElement('div');
         botMessage.className = 'chatbot-message bot-message';
+        
+        let actionsHtml = '';
+        if (actions && actions.length > 0) {
+            actionsHtml = '<div class="chatbot-actions">' + 
+                actions.map(action => 
+                    `<button class="chatbot-action-btn" data-action="${action.action}">${action.text}</button>`
+                ).join('') + 
+                '</div>';
+        }
+        
         botMessage.innerHTML = `
             <div class="message-avatar">🤖</div>
             <div class="message-content">
-                <p>${response}</p>
+                <p>${response.replace(/\n/g, '<br>')}</p>
+                ${actionsHtml}
                 <span class="message-time">${new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</span>
             </div>
         `;
         messagesContainer.appendChild(botMessage);
         
+        // Agregar event listeners a los botones de acción
+        botMessage.querySelectorAll('.chatbot-action-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                this.handleChatbotAction(action);
+            });
+        });
+        
         // Scroll al final
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    },
+    
+    handleChatbotAction(action) {
+        switch(action) {
+            case 'createTramite':
+                if (this.currentUser?.tipo === 'comercio') {
+                    document.getElementById('nuevoTramiteBtn')?.click();
+                }
+                break;
+            case 'viewTramites':
+                this.navigateToSection(this.currentUser?.tipo === 'comercio' ? 'comercioDashboard' : 'inspectorDashboard');
+                break;
+            case 'viewNotifications':
+                const notifBtn = document.getElementById('notificationsBtn') || document.getElementById('notificationsBtnInspector');
+                notifBtn?.click();
+                break;
+            case 'viewCalendar':
+                if (this.currentUser?.tipo === 'inspector') {
+                    this.navigateToSection('calendarSectionInspector');
+                }
+                break;
+        }
     },
     
     escapeHtml(text) {

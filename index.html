@@ -27,15 +27,15 @@
                 </div>
                 
                 <h1 class="welcome-title">
-                    <span class="welcome-title-main">Bienvenido a</span>
-                    <span class="welcome-title-brand">Aeternum Salubris</span>
+                    <span class="welcome-title-main" data-i18n="welcome">Bienvenido a</span>
+                    <span class="welcome-title-brand" data-i18n="brand">Aeternum Salubris</span>
                 </h1>
                 
-                <p class="welcome-subtitle">Tu sistema de gestión y seguimiento sanitario</p>
+                <p class="welcome-subtitle" data-i18n="subtitle">Tu sistema de gestión y seguimiento sanitario</p>
                 
                 <div class="welcome-actions">
                     <button id="goToLoginBtn" class="btn btn-primary btn-large welcome-btn">
-                        <span>Comenzar</span>
+                        <span data-i18n="begin">Comenzar</span>
                         <span class="btn-arrow">→</span>
                     </button>
                 </div>
@@ -68,56 +68,56 @@
                     <div class="login-logo">
                         <img src="Aesali.png" alt="Aeternum Salubris" class="logo-img-login">
                     </div>
-                    <h1>Aeternum Salubris</h1>
-                    <p>Sistema de Seguimiento y Trazabilidad</p>
+                    <h1 data-i18n="brand">Aeternum Salubris</h1>
+                    <p data-i18n="systemTitle">Sistema de Seguimiento y Trazabilidad</p>
                 </div>
                 
                 <div class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">Iniciar Sesión</button>
-                    <button class="auth-tab" data-tab="signup">Registrarse</button>
+                    <button class="auth-tab active" data-tab="login" data-i18n="login">Iniciar Sesión</button>
+                    <button class="auth-tab" data-tab="signup" data-i18n="signup">Registrarse</button>
                 </div>
 
                 <!-- Login Form -->
                 <form id="loginForm" class="auth-form active">
                     <div class="form-group">
-                        <label for="userType">Tipo de Usuario</label>
+                        <label for="userType" data-i18n="userType">Tipo de Usuario</label>
                         <select id="userType" required>
-                            <option value="">Seleccione...</option>
-                            <option value="comercio">Comercio</option>
-                            <option value="inspector">Inspector Sanitario</option>
+                            <option value="" data-i18n="selectUserType">Seleccione...</option>
+                            <option value="comercio" data-i18n="commerce">Comercio</option>
+                            <option value="inspector" data-i18n="inspector">Inspector Sanitario</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="email">Correo Electrónico</label>
-                        <input type="email" id="email" required placeholder="correo@ejemplo.com">
+                        <label for="email" data-i18n="email">Correo Electrónico</label>
+                        <input type="email" id="email" required data-i18n-placeholder="emailPlaceholder" placeholder="correo@ejemplo.com">
                     </div>
                     <div class="form-group">
-                        <label for="password">Contraseña</label>
+                        <label for="password" data-i18n="password">Contraseña</label>
                         <div class="password-input-wrapper">
-                            <input type="password" id="password" required placeholder="••••••••">
-                            <button type="button" class="toggle-password" aria-label="Mostrar contraseña">👁️</button>
+                            <input type="password" id="password" required data-i18n-placeholder="passwordPlaceholder" placeholder="••••••••">
+                            <button type="button" class="toggle-password" data-i18n-aria-label="showPassword" aria-label="Mostrar contraseña">👁️</button>
                         </div>
                     </div>
                     <div class="form-options">
                         <label class="remember-me">
                             <input type="checkbox" id="rememberMe">
-                            <span>Recordar sesión</span>
+                            <span data-i18n="rememberSession">Recordar sesión</span>
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-full">Iniciar Sesión</button>
+                    <button type="submit" class="btn btn-primary btn-full" data-i18n="login">Iniciar Sesión</button>
                     <div class="demo-credentials">
-                        <p class="demo-title"><strong>Credenciales de prueba:</strong></p>
+                        <p class="demo-title"><strong data-i18n="demoCredentials">Credenciales de prueba:</strong></p>
                         <div class="demo-cred-item">
-                            <span class="demo-type">Comercio:</span>
+                            <span class="demo-type" data-i18n="commerce">Comercio:</span>
                             <span class="demo-email">comercio@demo.com</span>
                             <span class="demo-password">demo123</span>
-                            <button type="button" class="btn-copy-cred" data-email="comercio@demo.com" data-password="demo123">Copiar</button>
+                            <button type="button" class="btn-copy-cred" data-email="comercio@demo.com" data-password="demo123" data-i18n="copy">Copiar</button>
                         </div>
                         <div class="demo-cred-item">
-                            <span class="demo-type">Inspector:</span>
+                            <span class="demo-type" data-i18n="inspector">Inspector:</span>
                             <span class="demo-email">inspector@demo.com</span>
                             <span class="demo-password">demo123</span>
-                            <button type="button" class="btn-copy-cred" data-email="inspector@demo.com" data-password="demo123">Copiar</button>
+                            <button type="button" class="btn-copy-cred" data-email="inspector@demo.com" data-password="demo123" data-i18n="copy">Copiar</button>
                         </div>
                     </div>
                 </form>
@@ -125,51 +125,51 @@
                 <!-- Signup Form -->
                 <form id="signupForm" class="auth-form">
                     <div class="form-group">
-                        <label for="signupUserType">Tipo de Usuario</label>
+                        <label for="signupUserType" data-i18n="userType">Tipo de Usuario</label>
                         <select id="signupUserType" required>
-                            <option value="">Seleccione...</option>
-                            <option value="comercio">Comercio</option>
-                            <option value="inspector">Inspector Sanitario</option>
+                            <option value="" data-i18n="selectUserType">Seleccione...</option>
+                            <option value="comercio" data-i18n="commerce">Comercio</option>
+                            <option value="inspector" data-i18n="inspector">Inspector Sanitario</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="signupNombre">Nombre Completo</label>
-                        <input type="text" id="signupNombre" required placeholder="Nombre del comercio o inspector">
+                        <label for="signupNombre" data-i18n="fullName">Nombre Completo</label>
+                        <input type="text" id="signupNombre" required data-i18n-placeholder="namePlaceholder" placeholder="Nombre del comercio o inspector">
                     </div>
                     <div class="form-group">
-                        <label for="signupEmail">Correo Electrónico</label>
-                        <input type="email" id="signupEmail" required placeholder="correo@ejemplo.com">
+                        <label for="signupEmail" data-i18n="email">Correo Electrónico</label>
+                        <input type="email" id="signupEmail" required data-i18n-placeholder="emailPlaceholder" placeholder="correo@ejemplo.com">
                     </div>
                     <div class="form-group">
-                        <label for="signupPassword">Contraseña</label>
+                        <label for="signupPassword" data-i18n="password">Contraseña</label>
                         <div class="password-input-wrapper">
-                            <input type="password" id="signupPassword" required placeholder="Mínimo 6 caracteres" minlength="6">
-                            <button type="button" class="toggle-password" aria-label="Mostrar contraseña">👁️</button>
+                            <input type="password" id="signupPassword" required data-i18n-placeholder="minPassword" placeholder="Mínimo 6 caracteres" minlength="6">
+                            <button type="button" class="toggle-password" data-i18n-aria-label="showPassword" aria-label="Mostrar contraseña">👁️</button>
                         </div>
                         <div class="password-strength" id="passwordStrength"></div>
                     </div>
                     <div class="form-group">
-                        <label for="signupConfirmPassword">Confirmar Contraseña</label>
+                        <label for="signupConfirmPassword" data-i18n="confirmPassword">Confirmar Contraseña</label>
                         <div class="password-input-wrapper">
-                            <input type="password" id="signupConfirmPassword" required placeholder="Repite la contraseña">
-                            <button type="button" class="toggle-password" aria-label="Mostrar contraseña">👁️</button>
+                            <input type="password" id="signupConfirmPassword" required data-i18n-placeholder="confirmPasswordPlaceholder" placeholder="Repite la contraseña">
+                            <button type="button" class="toggle-password" data-i18n-aria-label="showPassword" aria-label="Mostrar contraseña">👁️</button>
                         </div>
                     </div>
                     <div class="form-group" id="signupTelefonoGroup" style="display: none;">
-                        <label for="signupTelefono">Teléfono de Contacto</label>
-                        <input type="tel" id="signupTelefono" placeholder="+57 300 123 4567">
+                        <label for="signupTelefono" data-i18n="phone">Teléfono de Contacto</label>
+                        <input type="tel" id="signupTelefono" data-i18n-placeholder="phonePlaceholder" placeholder="+57 300 123 4567">
                     </div>
                     <div class="form-group" id="signupDireccionGroup" style="display: none;">
-                        <label for="signupDireccion">Dirección</label>
-                        <input type="text" id="signupDireccion" placeholder="Dirección del comercio">
+                        <label for="signupDireccion" data-i18n="address">Dirección</label>
+                        <input type="text" id="signupDireccion" data-i18n-placeholder="addressPlaceholder" placeholder="Dirección del comercio">
                     </div>
                     <div class="form-options">
                         <label class="remember-me">
                             <input type="checkbox" id="acceptTerms" required>
-                            <span>Acepto los términos y condiciones</span>
+                            <span data-i18n="acceptTerms">Acepto los términos y condiciones</span>
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-full">Crear Cuenta</button>
+                    <button type="submit" class="btn btn-primary btn-full" data-i18n="signup">Crear Cuenta</button>
                 </form>
             </div>
         </div>
@@ -182,8 +182,32 @@
                 <div class="header-logo">
                     <img src="Aesali.png" alt="Aeternum Salubris" class="logo-img" />
                 </div>
-                <h1>Mi Comercio</h1>
+                <h1 data-i18n="myCommerce">Mi Comercio</h1>
                 <div class="header-actions">
+                    <div class="language-selector">
+                        <button id="languageToggle" class="btn-icon" title="Cambiar idioma" aria-label="Cambiar idioma">
+                            <span class="language-flag">🌐</span>
+                            <span class="language-code">ES</span>
+                        </button>
+                        <div id="languageDropdown" class="language-dropdown">
+                            <button class="language-option active" data-lang="es">
+                                <span class="flag">🇪🇸</span>
+                                <span>Español</span>
+                            </button>
+                            <button class="language-option" data-lang="en">
+                                <span class="flag">🇺🇸</span>
+                                <span>English</span>
+                            </button>
+                            <button class="language-option" data-lang="fr">
+                                <span class="flag">🇫🇷</span>
+                                <span>Français</span>
+                            </button>
+                            <button class="language-option" data-lang="pt">
+                                <span class="flag">🇧🇷</span>
+                                <span>Português</span>
+                            </button>
+                        </div>
+                    </div>
                     <button id="globalSearchBtn" class="btn-icon" title="Búsqueda global (Ctrl+K)" aria-label="Búsqueda global">
                         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
@@ -249,8 +273,8 @@
                         </div>
                         <div class="widget-card widget-notifications-preview">
                             <div class="widget-header">
-                                <h3>🔔 Notificaciones Recientes</h3>
-                                <button class="btn-link" onclick="AppState.navigateToSection('notificationsSectionComercio')">Ver todas</button>
+                                <h3>🔔 <span data-i18n="notifications">Notificaciones</span> <span data-i18n="recent">Recientes</span></h3>
+                                <button class="btn-link" onclick="AppState.navigateToSection('notificationsSectionComercio')" data-i18n="seeAll">Ver todas</button>
                             </div>
                             <div id="widgetNotificacionesComercio">
                                 <p class="widget-empty">No hay notificaciones</p>
@@ -262,7 +286,7 @@
                 <!-- Barra de búsqueda y filtros -->
                 <div class="search-filters-bar">
                     <div class="search-box">
-                        <input type="text" id="searchInputComercio" placeholder="Buscar por nombre, ID, dirección..." />
+                        <input type="text" id="searchInputComercio" data-i18n-placeholder="searchPlaceholder" placeholder="Buscar por nombre, ID, dirección..." />
                         <button class="advanced-search-toggle" onclick="AppState.toggleAdvancedSearch('comercio')">
                             <svg class="search-icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"></circle>
@@ -296,9 +320,9 @@
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <path d="m21 21-4.35-4.35"></path>
                             </svg>
-                            Búsqueda Avanzada
+                            <span data-i18n="advancedSearch">Búsqueda Avanzada</span>
                         </h3>
-                        <button class="advanced-search-toggle" onclick="AppState.toggleAdvancedSearch('comercio')">Cerrar</button>
+                        <button class="advanced-search-toggle" onclick="AppState.toggleAdvancedSearch('comercio')" data-i18n="close">Cerrar</button>
                     </div>
                     <div class="advanced-search-filters">
                         <div class="form-group">
@@ -335,8 +359,8 @@
                             </select>
                         </div>
                         <div class="form-group" style="grid-column: 1 / -1;">
-                            <button class="btn btn-primary" onclick="AppState.applyAdvancedSearch('comercio')">Aplicar Filtros</button>
-                            <button class="btn btn-secondary" onclick="AppState.clearAdvancedSearch('comercio')">Limpiar</button>
+                            <button class="btn btn-primary" onclick="AppState.applyAdvancedSearch('comercio')" data-i18n="applyFilters">Aplicar Filtros</button>
+                            <button class="btn btn-secondary" onclick="AppState.clearAdvancedSearch('comercio')" data-i18n="clearFilters">Limpiar</button>
                         </div>
                     </div>
                     
@@ -348,14 +372,14 @@
                         </div>
                         <div class="save-filter-input-group">
                             <input type="text" id="saveFilterNameComercio" placeholder="Nombre del filtro..." />
-                            <button class="btn btn-primary save-filter-btn" onclick="AppState.saveCurrentFilters(document.getElementById('saveFilterNameComercio').value || 'Filtro ' + new Date().toLocaleDateString())">Guardar Filtro</button>
+                            <button class="btn btn-primary save-filter-btn" onclick="AppState.saveCurrentFilters(document.getElementById('saveFilterNameComercio').value || 'Filtro ' + new Date().toLocaleDateString())" data-i18n="saveFilter">Guardar Filtro</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="page-header">
-                    <h2>Seguimiento de Trámites</h2>
-                    <button id="nuevoTramiteBtn" class="btn btn-primary">Nuevo Trámite</button>
+                    <h2 data-i18n="tracking">Seguimiento de Trámites</h2>
+                    <button id="nuevoTramiteBtn" class="btn btn-primary" data-i18n="newTramite">Nuevo Trámite</button>
                 </div>
 
                 <!-- Modal Nuevo Trámite -->
@@ -365,7 +389,7 @@
                         <h2>Nuevo Trámite de Concepto Sanitario</h2>
                         <form id="nuevoTramiteForm">
                             <div class="form-group">
-                                <label for="nombreComercio">Nombre del Comercio</label>
+                                <label for="nombreComercio" data-i18n="commerceName">Nombre del Comercio</label>
                                 <input type="text" id="nombreComercio" required>
                             </div>
                             <div class="form-group">
@@ -392,7 +416,7 @@
                                 <label for="telefono">Teléfono de Contacto</label>
                                 <input type="tel" id="telefono" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Solicitar Trámite</button>
+                            <button type="submit" class="btn btn-primary" data-i18n="requestTramite">Solicitar Trámite</button>
                         </form>
                     </div>
                 </div>
@@ -416,7 +440,7 @@
                 <h1>Notificaciones</h1>
                 <div class="header-actions">
                     <button id="themeToggleNav" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
-                    <button onclick="AppState.navigateToSection('comercioDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
+                    <button onclick="AppState.navigateToSection('comercioDashboard')" class="btn-icon" data-i18n-title="back" title="Volver"><span class="icon-text" data-i18n="back">Volver</span></button>
                     <button id="logoutBtnNav" class="btn-icon btn-logout">Salir</button>
                 </div>
             </div>
@@ -438,7 +462,7 @@
                 <h1>Mi Perfil</h1>
                 <div class="header-actions">
                     <button id="themeToggleNav2" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
-                    <button onclick="AppState.navigateToSection('comercioDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
+                    <button onclick="AppState.navigateToSection('comercioDashboard')" class="btn-icon" data-i18n-title="back" title="Volver"><span class="icon-text" data-i18n="back">Volver</span></button>
                     <button id="logoutBtnNav2" class="btn-icon btn-logout">Salir</button>
                 </div>
             </div>
@@ -458,8 +482,32 @@
                 <div class="header-logo">
                     <img src="Aesali.png" alt="Aeternum Salubris" class="logo-img" />
                 </div>
-                <h1>Inspector Sanitario</h1>
+                <h1 data-i18n="inspector">Inspector Sanitario</h1>
                 <div class="header-actions">
+                    <div class="language-selector">
+                        <button id="languageToggleInspector" class="btn-icon" title="Cambiar idioma" aria-label="Cambiar idioma">
+                            <span class="language-flag">🌐</span>
+                            <span class="language-code">ES</span>
+                        </button>
+                        <div id="languageDropdownInspector" class="language-dropdown">
+                            <button class="language-option active" data-lang="es">
+                                <span class="flag">🇪🇸</span>
+                                <span>Español</span>
+                            </button>
+                            <button class="language-option" data-lang="en">
+                                <span class="flag">🇺🇸</span>
+                                <span>English</span>
+                            </button>
+                            <button class="language-option" data-lang="fr">
+                                <span class="flag">🇫🇷</span>
+                                <span>Français</span>
+                            </button>
+                            <button class="language-option" data-lang="pt">
+                                <span class="flag">🇧🇷</span>
+                                <span>Português</span>
+                            </button>
+                        </div>
+                    </div>
                     <button id="globalSearchBtnInspector" class="btn-icon" title="Búsqueda global (Ctrl+K)" aria-label="Búsqueda global">
                         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
@@ -467,8 +515,8 @@
                         </svg>
                     </button>
                     <button id="themeToggleInspector" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
-                    <button id="statsBtn" class="btn-icon" title="Estadísticas"><span class="icon-text">Estadísticas</span></button>
-                    <button id="calendarBtn" class="btn-icon" title="Calendario"><span class="icon-text">Calendario</span></button>
+                    <button id="statsBtn" class="btn-icon" data-i18n-title="statistics" title="Estadísticas"><span class="icon-text" data-i18n="statistics">Estadísticas</span></button>
+                    <button id="calendarBtn" class="btn-icon" data-i18n-title="calendar" title="Calendario"><span class="icon-text" data-i18n="calendar">Calendario</span></button>
                     <button id="notificationsBtnInspector" class="btn-icon" title="Notificaciones">
                         <span id="notificationCountInspector" class="notification-badge">0</span>
                         <span class="icon-text">Notificaciones</span>
@@ -528,7 +576,7 @@
                         <div class="widget-card widget-activity">
                             <div class="widget-header">
                                 <h3>📅 Actividad del Día</h3>
-                                <button class="btn-link" onclick="AppState.navigateToSection('calendarSectionInspector')">Ver calendario</button>
+                                <button class="btn-link" onclick="AppState.navigateToSection('calendarSectionInspector')" data-i18n="seeCalendar">Ver calendario</button>
                             </div>
                             <div id="widgetActividadInspector">
                                 <p class="widget-empty">No hay actividades programadas</p>
@@ -540,7 +588,7 @@
                 <!-- Barra de búsqueda y filtros -->
                 <div class="search-filters-bar">
                     <div class="search-box">
-                        <input type="text" id="searchInputInspector" placeholder="Buscar por nombre, ID, dirección..." />
+                        <input type="text" id="searchInputInspector" data-i18n-placeholder="searchPlaceholder" placeholder="Buscar por nombre, ID, dirección..." />
                     </div>
                     <div class="filter-controls">
                         <select id="sortByInspector">
@@ -589,7 +637,7 @@
                 <h1>Estadísticas y Reportes</h1>
                 <div class="header-actions">
                     <button id="themeToggleStats" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
-                    <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
+                    <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" data-i18n-title="back" title="Volver"><span class="icon-text" data-i18n="back">Volver</span></button>
                     <button id="logoutBtnNavInspector" class="btn-icon btn-logout">Salir</button>
                 </div>
             </div>
@@ -611,7 +659,7 @@
                 <h1>Calendario de Visitas</h1>
                 <div class="header-actions">
                     <button id="themeToggleCalendar" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
-                    <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
+                    <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" data-i18n-title="back" title="Volver"><span class="icon-text" data-i18n="back">Volver</span></button>
                     <button id="logoutBtnNavInspector2" class="btn-icon btn-logout">Salir</button>
                 </div>
             </div>
@@ -633,7 +681,7 @@
                 <h1>Notificaciones</h1>
                 <div class="header-actions">
                     <button id="themeToggleNotificationsInspector" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
-                    <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
+                    <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" data-i18n-title="back" title="Volver"><span class="icon-text" data-i18n="back">Volver</span></button>
                     <button id="logoutBtnNavInspector3" class="btn-icon btn-logout">Salir</button>
                 </div>
             </div>
@@ -655,7 +703,7 @@
                 <h1>Mi Perfil</h1>
                 <div class="header-actions">
                     <button id="themeToggleProfileInspector" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar entre tema claro y oscuro">🌙</button>
-                    <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" title="Volver"><span class="icon-text">Volver</span></button>
+                    <button onclick="AppState.navigateToSection('inspectorDashboard')" class="btn-icon" data-i18n-title="back" title="Volver"><span class="icon-text" data-i18n="back">Volver</span></button>
                     <button id="logoutBtnNavInspector4" class="btn-icon btn-logout">Salir</button>
                 </div>
             </div>
@@ -794,9 +842,9 @@
                 Búsqueda Global
             </h2>
             <div class="global-search-container">
-                <input type="text" id="globalSearchInput" placeholder="Buscar trámites, documentos, notificaciones..." autocomplete="off" />
+                <input type="text" id="globalSearchInput" data-i18n-placeholder="globalSearchPlaceholder" placeholder="Buscar trámites, documentos, notificaciones..." autocomplete="off" />
                 <div id="globalSearchResults" class="global-search-results">
-                    <p class="search-placeholder">Escribe para buscar...</p>
+                    <p class="search-placeholder" data-i18n="writeToSearch">Escribe para buscar...</p>
                 </div>
             </div>
         </div>
@@ -816,11 +864,11 @@
                 <div class="chatbot-header-info">
                     <div class="chatbot-avatar">🤖</div>
                     <div>
-                        <h3>Asistente Virtual</h3>
-                        <p class="chatbot-status">En línea</p>
+                        <h3 data-i18n="chatbotTitle">Asistente Virtual</h3>
+                        <p class="chatbot-status" data-i18n="chatbotOnline">En línea</p>
                     </div>
                 </div>
-                <button id="chatbotClose" class="chatbot-close" aria-label="Cerrar chat">
+                <button id="chatbotClose" class="chatbot-close" data-i18n-aria-label="chatbotClose" aria-label="Cerrar chat">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -829,10 +877,10 @@
             </div>
             
             <div id="chatbotMessages" class="chatbot-messages">
-                <div class="chatbot-message bot-message">
+                <div class="chatbot-message bot-message welcome-message">
                     <div class="message-avatar">🤖</div>
                     <div class="message-content">
-                        <p>¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
+                        <p>¡Hola! 👋 Soy tu asistente virtual de Aeternum Salubris. ¿En qué puedo ayudarte hoy?</p>
                         <span class="message-time">Ahora</span>
                     </div>
                 </div>
@@ -890,7 +938,7 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Contacto</h4>
+                    <h4 data-i18n="contact">Contacto</h4>
                     <div class="footer-contact">
                         <div class="footer-contact-item">
                             <svg class="footer-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -909,17 +957,17 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Enlaces Rápidos</h4>
+                    <h4 data-i18n="quickLinks">Enlaces Rápidos</h4>
                     <ul class="footer-links">
-                        <li><a href="#" onclick="AppState.navigateToSection(AppState.currentUser?.tipo === 'comercio' ? 'comercioDashboard' : 'inspectorDashboard'); return false;">Inicio</a></li>
-                        <li><a href="#" onclick="AppState.navigateToSection(AppState.currentUser?.tipo === 'comercio' ? 'notificationsSectionComercio' : 'notificationsSectionInspector'); return false;">Notificaciones</a></li>
-                        <li><a href="#" onclick="AppState.navigateToSection(AppState.currentUser?.tipo === 'comercio' ? 'profileSectionComercio' : 'profileSectionInspector'); return false;">Mi Perfil</a></li>
-                        <li><a href="#" onclick="document.getElementById('chatbotToggle')?.click(); return false;">Ayuda</a></li>
+                        <li><a href="#" onclick="AppState.navigateToSection(AppState.currentUser?.tipo === 'comercio' ? 'comercioDashboard' : 'inspectorDashboard'); return false;" data-i18n="home">Inicio</a></li>
+                        <li><a href="#" onclick="AppState.navigateToSection(AppState.currentUser?.tipo === 'comercio' ? 'notificationsSectionComercio' : 'notificationsSectionInspector'); return false;" data-i18n="notifications">Notificaciones</a></li>
+                        <li><a href="#" onclick="AppState.navigateToSection(AppState.currentUser?.tipo === 'comercio' ? 'profileSectionComercio' : 'profileSectionInspector'); return false;" data-i18n="myProfile">Mi Perfil</a></li>
+                        <li><a href="#" onclick="document.getElementById('chatbotToggle')?.click(); return false;" data-i18n="help">Ayuda</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Información</h4>
+                    <h4 data-i18n="information">Información</h4>
                     <ul class="footer-links">
                         <li><a href="#" onclick="alert('Política de Privacidad\n\nAeternum Salubris protege la privacidad de tus datos personales según las normativas vigentes.'); return false;">Política de Privacidad</a></li>
                         <li><a href="#" onclick="alert('Términos y Condiciones\n\nAl usar este sistema, aceptas los términos y condiciones de uso establecidos.'); return false;">Términos y Condiciones</a></li>
